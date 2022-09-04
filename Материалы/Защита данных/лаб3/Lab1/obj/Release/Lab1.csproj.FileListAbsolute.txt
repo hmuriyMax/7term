@@ -1,0 +1,14 @@
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\bin\Release\Lab1.exe.config
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\bin\Release\Lab1.exe
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\bin\Release\Lab1.pdb
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.AboutBox.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.Main.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.Login.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.PassChange.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.Properties.Resources.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.UserList.resources
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.csproj.GenerateResource.Cache
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.csproj.CoreCompileInputs.cache
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.exe
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.pdb
+C:\Users\User\Dropbox\7 семестр\ЗД\Lab1\Lab1\obj\Release\Lab1.csprojResolveAssemblyReference.cache

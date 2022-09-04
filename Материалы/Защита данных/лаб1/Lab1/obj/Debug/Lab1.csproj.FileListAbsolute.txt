@@ -1,0 +1,14 @@
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\bin\Debug\Lab1.exe.config
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\bin\Debug\Lab1.exe
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\bin\Debug\Lab1.pdb
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.csprojAssemblyReference.cache
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.AboutBox.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.Main.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.Login.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.PassChange.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.Properties.Resources.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.UserList.resources
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.csproj.GenerateResource.cache
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.exe
+C:\Users\79777\Desktop\инст\Защита данных\лаб1\Lab1\obj\Debug\Lab1.pdb

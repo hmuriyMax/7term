@@ -1,0 +1,9 @@
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\bin\Release\Lab6.exe.config
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\bin\Release\Lab6.exe
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\bin\Release\Lab6.pdb
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.Form1.resources
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.Properties.Resources.resources
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.csproj.GenerateResource.cache
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.csproj.CoreCompileInputs.cache
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.exe
+C:\Users\79777\Desktop\инст\Защита данных\Lab6\Lab6\obj\Release\Lab6.pdb

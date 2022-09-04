@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Users>
+	<User>
+		<Name>Admin</Name>
+		<Pass>rzð&#x15;</Pass>
+		<PassSecure>False</PassSecure>
+		<IsBlocked>False</IsBlocked>
+	</User>
+	<User>
+		<Name>kir</Name>
+		<Pass>Xe</Pass>
+		<PassSecure>False</PassSecure>
+		<IsBlocked>False</IsBlocked>
+	</User>
+</Users>

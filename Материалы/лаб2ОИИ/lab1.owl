@@ -1,0 +1,606 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#"
+     xml:base="http://www.semanticweb.org/кир/ontologies/2020/11/lab2"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#AccompaniedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#AccompaniedBy">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#CausedBy"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_loss"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pain"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pressure"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fever"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_pain"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscle_pain"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_inflammation"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_of_breath"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_loss"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_throat"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_enlargement"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#CausedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#CausedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_loss"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pain"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pressure"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fever"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_pain"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscle_pain"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_inflammation"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_of_breath"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_loss"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_throat"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_enlargement"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_Loss_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_Loss_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_loss"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_Pain_Type -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_Pain_Type">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_Pressure_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_Pressure_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pressure"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Complications -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Complications">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza_Degree -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza_Degree">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough_Type -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough_Type">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue_Degree -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue_Degree">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache_Type -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache_Type">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_Pain_Degree -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_Pain_Degree">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_pain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_Inflammation_Degree -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_Inflammation_Degree">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_inflammation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Myalgia_Type -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Myalgia_Type">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscle_pain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_Of_Breath_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_Of_Breath_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_of_breath"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_Loss_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_Loss_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_loss"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_Throat_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_Throat_Presence">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_throat"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Temperature -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Temperature">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fever"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_Enlargement_Degree -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_Enlargement_Degree">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_enlargement"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting_Presence -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting_Presence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_loss -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Appetite_loss">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pain -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pain">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pressure -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Chest_pressure">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Confusion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Conjunctivitis">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Coryza">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Cough">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Diarrhea">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fatigue">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fever -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Fever">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Headache">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_pain -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Joint_pain">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscle_pain -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscle_pain">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_inflammation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Muscoza_inflammation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_of_breath -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Shortness_of_breath">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_loss -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Smell_loss">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_throat -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Sore_throat">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_enlargement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Tonsil_enlargement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Vomiting">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Symptom"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Adenovirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Adenovirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pneumonia, otitis, sinusitis, stageit</Complications>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38.5</Temperature>
+        <Tonsil_Enlargement_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Tonsil_Enlargement_Degree>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Bocavirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Bocavirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">catarrhal otitis, conjunctivitis, cardiomyopathy</Complications>
+        <Coryza_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">medium</Coryza_Degree>
+        <Cough_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dry</Cough_Type>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39.0</Temperature>
+        <Tonsil_Enlargement_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Strong</Tonsil_Enlargement_Degree>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#COVID-19 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#COVID-19">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Appetite_Loss_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Appetite_Loss_Presence>
+        <Chest_Pain_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">infectious</Chest_Pain_Type>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pulmonary fibrosis, myocarditis, Chronic heart failure, Kidney damage, Pseudomembranous colitis, Anosmia</Complications>
+        <Confusion_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Confusion_Presence>
+        <Cough_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dry</Cough_Type>
+        <Fatigue_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Fatigue_Degree>
+        <Headache_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tension</Headache_Type>
+        <Smell_Loss_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Smell_Loss_Presence>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38.0</Temperature>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Enterovirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Enterovirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></Complications>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">muscle atrophy, respiratory and swallowing disorders , Poor low temperature tolerance</Complications>
+        <Headache_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hypertensive</Headache_Type>
+        <Myalgia_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">infectious</Myalgia_Type>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39</Temperature>
+        <Vomiting_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Vomiting_Presence>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Influenza -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Influenza">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pneumonia, lung abscess, empyema, acute respiratory distress syndrome, rhinitis, sinusitis, otitis, tracheitis, encephalitis, meningitis, neuritis, radiculoneuritis, liver, damage myocarditis, toxic-allergic shock, shortness
+of breath febrile convulsions</Complications>
+        <Cough_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dry</Cough_Type>
+        <Headache_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hypertonic</Headache_Type>
+        <Joint_Pain_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">infectious</Joint_Pain_Degree>
+        <Myalgia_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">infectious</Myalgia_Type>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38</Temperature>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#MERS -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#MERS">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">acute respiratory distress syndrome, hypoxia, hypoxemia</Complications>
+        <Headache_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cluster</Headache_Type>
+        <Myalgia_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tension</Myalgia_Type>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39.0</Temperature>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Metapneumovirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Metapneumovirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bronchiolitis, respiratory distress, pneumonia</Complications>
+        <Coryza_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Coryza_Degree>
+        <Cough_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dry</Cough_Type>
+        <Headache_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">migraines</Headache_Type>
+        <Shortness_Of_Breath_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Shortness_Of_Breath_Presence>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39</Temperature>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Orthopneumovirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Orthopneumovirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">edema of the mucosa, pneumonia</Complications>
+        <Coryza_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">medium</Coryza_Degree>
+        <Cough_Type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">productive</Cough_Type>
+        <Muscoza_Inflammation_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Muscoza_Inflammation_Degree>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Parainfluenza -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Parainfluenza">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stenosing laryngotracheitis, obstructive bronchitis, bronchiolitis, pneumonia</Complications>
+        <Coryza_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Coryza_Degree>
+        <Muscoza_Inflammation_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium</Muscoza_Inflammation_Degree>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39.5</Temperature>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Rotavirus_infection -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#Rotavirus_infection">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications rdf:datatype="http://www.w3.org/2001/XMLSchema#string">lack of urination, shortness of breath, sinking of the eyes</Complications>
+        <Coryza_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">medium</Coryza_Degree>
+        <Diarrhea_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Diarrhea_Presence>
+        <Fatigue_Degree rdf:datatype="http://www.w3.org/2001/XMLSchema#string">strong</Fatigue_Degree>
+        <Sore_Throat_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Sore_Throat_Presence>
+        <Vomiting_Presence rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</Vomiting_Presence>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS-CoV -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS-CoV">
+        <rdf:type rdf:resource="http://www.semanticweb.org/кир/ontologies/2020/11/lab2#SARS"/>
+        <Complications>leukocytosis, hyponatremia, hypokalemia, hypocalcemia, hypomagnesemia</Complications>
+        <Headache_Type>strong</Headache_Type>
+        <Myalgia_Type>tolerable</Myalgia_Type>
+        <Temperature rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38</Temperature>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
