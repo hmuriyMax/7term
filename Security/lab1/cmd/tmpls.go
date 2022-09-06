@@ -14,12 +14,6 @@ type User struct {
 	IsGoodPass bool
 }
 
-var users []User
-
-const filepath = "./database"
-
-var sessions map[string]string
-
 func Redirect(w http.ResponseWriter, url string, status int) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

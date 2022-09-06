@@ -6,12 +6,17 @@ import (
 	"time"
 )
 
-type Tokens = map[string]struct {
+type Token struct {
 	name string
 	su   bool
 }
 
-func GenerateToken() string {
+type Tokens struct {
+	list map[string]Token
+	num  int
+}
+
+func generateToken() string {
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyz" +
@@ -23,12 +28,19 @@ func GenerateToken() string {
 	}
 	return b.String()
 }
+
 func (t *Tokens) Add(name string, su bool) {
 	var token string
 	for {
-		token = GenerateToken()
-		if _, ok := (*t)[token]; !ok {
+		token = generateToken()
+		if _, ok := (*t).list[token]; !ok {
 			break
 		}
 	}
+	(*t).list[token] = Token{name: name, su: su}
+	(*t).num++
+}
+
+func (t *Tokens) Get(token string) Token {
+	return (*t).list[token]
 }
