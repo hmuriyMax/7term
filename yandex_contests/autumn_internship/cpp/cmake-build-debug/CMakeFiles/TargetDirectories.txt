@@ -1,0 +1,3 @@
+/media/maxim/TOSHIBA EXT/prog/7term/yandex_contests/autumn_internship/cpp/cmake-build-debug/CMakeFiles/cpp.dir
+/media/maxim/TOSHIBA EXT/prog/7term/yandex_contests/autumn_internship/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/media/maxim/TOSHIBA EXT/prog/7term/yandex_contests/autumn_internship/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
