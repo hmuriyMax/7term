@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбирай пароль</title>
+    <link rel="stylesheet" href="res/styles/style.css">
+    <link rel="stylesheet" href="res/styles/form.css">
+    <style>
+        body > *{
+            margin: 5px 0;
+            text-align: center;
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+        }
+        h1{
+            margin: 0.7em 0;
+        }
+        #right-block{
+            height: 100%;
+            background-color: #DDDE;
+        }
+        #left-block{
+            color: white;
+            text-shadow: 3px 3px 4px black;
+        }
+        body{
+            justify-content: space-evenly;
+            background-image: url("res/img/bg.jpg");
+        }
+        form>p{
+            margin-top: 0;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+        #submit{
+            color: #809caa;
+            outline: 0 solid transparent;
+            cursor: default;
+        }
+        #left-block > img{
+            width: 200px;
+            height: 200px;
+            outline: 5px solid white;
+            border-radius: 100px;
+            display: block;
+            margin: 0 auto;
+            outline-offset: 5px;
+            transition-property: outline-width;
+            transition-duration: 2s;
+            transition-timing-function: ease-in-out;
+        }
+    </style>
+    <script>
+        let a, b = false;
+
+        function checkFirst(el){
+            let username = "{{.username}}"
+            let p2 = document.getElementById("pass2");
+            username = [...username].reverse().join("")
+            if (el.value.length < 4 || el.value === username) {
+                el.style.borderBottomColor = "#934B4B";
+                a = false
+            } else {
+                a = true
+                el.style.borderBottomColor = "#478a47";
+            }
+            checkSecond(p2)
+            submitSwitcher()
+        }
+
+        function checkSecond(el){
+            const p1 = document.getElementById("pass1").value;
+            if (el.value !== p1) {
+                el.style.borderBottomColor = "#934B4B";
+                b = false
+            } else {
+                el.style.borderBottomColor = "#478a47";
+                b = true
+            }
+            submitSwitcher()
+        }
+
+        function submitSwitcher(){
+            let submit = document.getElementById("submit")
+            let shark = document.getElementById("left-block").children[0]
+            if (a && b){
+                submit.style.outlineWidth = "2px"
+                submit.style.cursor = "pointer"
+                submit.style.color = "#003a59"
+                submit.disabled = false
+                shark.style.outlineWidth = "30px"
+
+            } else {
+                submit.style.outlineWidth = "0px"
+                submit.style.cursor = "default"
+                submit.style.color = "#809caa"
+                submit.disabled = true
+                shark.style.outlineWidth = "2px"
+            }
+        }
+    </script>
+</head>
+<body>
+<div id="left-block">
+    <img src="res/img/shark.jpg" alt="">
+    <h1>Добро пожаловать, {{.username}}!</h1>
+</div>
+<div id="right-block">
+    <form action="/newpass" autocomplete="on" method="POST">
+        <p>Пора создать вам пароль!</p>
+        <div id="message" style="display: {{.display}}">{{.message}}</div>
+        <label>
+            <input name="pass1" type="password" id="pass1" oninput="checkFirst(this)"
+                   readonly onfocus="this.removeAttribute('readonly')" placeholder="Введите пароль" required>
+        </label>
+        <label>
+            <input name="pass2" type="password" id="pass2" oninput="checkSecond(this)"
+                   readonly onfocus="this.removeAttribute('readonly')" placeholder="Повторите пароль" required>
+        </label>
+        <input type="submit" id="submit" value="Создать пароль!" disabled>
+    </form>
+</div>
+</body>
+</html>
