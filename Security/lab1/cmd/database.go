@@ -10,7 +10,7 @@ import (
 
 type Database struct {
 	filepath string
-	parsed   []User
+	parsed   []*User
 }
 
 func (db *Database) Open(filepath string) (bool, error) {
@@ -25,7 +25,7 @@ func (db *Database) Open(filepath string) (bool, error) {
 			log.Printf("Error while creating db at %s...\n", db.filepath)
 			return false, err
 		}
-		db.parsed = append(db.parsed, User{Login: "ADMIN"})
+		db.parsed = append(db.parsed, &User{Login: "ADMIN", IsSuperuser: true})
 		fl = true
 	} else {
 		err := db.Parse()
@@ -53,19 +53,46 @@ func (db *Database) Parse() error {
 }
 
 func (db *Database) Append(user *User) error {
-	db.parsed = append(db.parsed, *user)
+	db.parsed = append(db.parsed, user)
+	return nil
+}
+
+func (db *Database) Edit(user *User) error {
+	gotUser, err := db.GetUserByLogin(user.Login)
+	if err != nil {
+		return err
+	}
+	*gotUser = *user
 	return nil
 }
 
 func (db *Database) GetUserByLogin(login string) (*User, error) {
 	for _, el := range db.parsed {
 		if el.Login == login {
-			return &el, nil
+			return el, nil
 		}
 	}
-	return nil, errors.New("Trash!\n")
+	return nil, errors.New("User not found!\n")
 }
 
-func (db *Database) GetAllUsers() []User {
+func (db *Database) GetAllUsers() []*User {
 	return db.parsed
+}
+
+func (db *Database) Close() {
+	file, err := os.OpenFile(db.filepath, os.O_WRONLY, 0777)
+	defer func() { _ = file.Close() }()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	marshal, err := json.Marshal(db.parsed)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = fmt.Fprint(file, string(marshal))
+	if err != nil {
+		log.Fatal(err)
+	}
 }

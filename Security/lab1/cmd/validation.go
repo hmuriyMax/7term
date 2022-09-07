@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"math/rand"
 	"strings"
 	"time"
@@ -29,7 +30,12 @@ func generateToken() string {
 	return b.String()
 }
 
-func (t *Tokens) Add(name string, su bool) {
+func (t *Tokens) Start() {
+	t.num = 0
+	t.list = make(map[string]Token)
+}
+
+func (t *Tokens) Add(name string, su bool) string {
 	var token string
 	for {
 		token = generateToken()
@@ -37,10 +43,15 @@ func (t *Tokens) Add(name string, su bool) {
 			break
 		}
 	}
-	(*t).list[token] = Token{name: name, su: su}
-	(*t).num++
+	t.list[token] = Token{name: name, su: su}
+	t.num++
+	return token
 }
 
-func (t *Tokens) Get(token string) Token {
-	return (*t).list[token]
+func (t *Tokens) Get(token string) (Token, error) {
+	t2, ok := (*t).list[token]
+	if !ok {
+		return Token{}, errors.New("No token in database")
+	}
+	return t2, nil
 }
