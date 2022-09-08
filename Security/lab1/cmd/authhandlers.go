@@ -41,7 +41,7 @@ func logoutHandler(writer http.ResponseWriter, request *http.Request) {
 		DelCookie(writer, "token")
 	}
 	tokens.Delete(tok.Value)
-	Redirect(writer, "/", http.StatusPermanentRedirect)
+	Redirect(writer, "/", http.StatusFound)
 }
 
 func newPassHandler(writer http.ResponseWriter, request *http.Request) {
