@@ -44,9 +44,11 @@ func main() {
 	router.HandleFunc("/auth", authHandler)
 	router.HandleFunc("/newpass", newPassHandler)
 	router.HandleFunc("/firstsign", firstSignHandler)
-	router.HandleFunc("/listusers", listUsersHandler)
+	router.HandleFunc("/changepass", changePassHandler)
 	router.HandleFunc("/adduser", adduserHandler)
 	router.HandleFunc("/checklogin", checkLogHandler)
+	router.HandleFunc("/changeblock", changeBlockHandler)
+	router.HandleFunc("/changerestr", changeRestrHandler)
 	router.HandleFunc("/logout", logoutHandler)
 	log.Printf("HTTP-server started! http://localhost:%s", port)
 	go func() {

@@ -11,14 +11,6 @@ const HTMLpath = "./web/"
 var Age, _ = time.ParseDuration("1d")
 var CookiesAge = Age.Seconds()
 
-type User struct {
-	Login       string
-	Pass        string
-	IsBlocked   bool
-	IsGoodPass  bool
-	IsSuperuser bool
-}
-
 func Redirect(w http.ResponseWriter, url string, status int) {
 	//duration, err := time.ParseDuration("5s")
 	//if err != nil {
@@ -51,4 +43,12 @@ func DelCookie(w http.ResponseWriter, cookieName string) {
 		MaxAge: -1,
 	}
 	http.SetCookie(w, &c)
+}
+
+func Reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }

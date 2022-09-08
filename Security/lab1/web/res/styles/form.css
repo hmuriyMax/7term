@@ -61,14 +61,3 @@ label > input:focus-visible {
 #submit:hover{
     outline-color: #003a59;
 }
-#message{
-    margin: 20px auto;
-    text-align: center;
-    font-size: 0.8em;
-    outline: 2px solid #7e2b2b;
-    background-color: #9d6767;
-    color: white;
-    border-radius: 2px;
-    padding: 5px;
-    font-weight: bold;
-}

@@ -53,55 +53,8 @@
             transition-timing-function: ease-in-out;
         }
     </style>
-    <script>
-        let a, b = false;
-
-        function checkFirst(el){
-            let username = "{{.username}}"
-            let p2 = document.getElementById("pass2");
-            username = [...username].reverse().join("")
-            if (el.value.length < 4 || el.value === username) {
-                el.style.borderBottomColor = "#934B4B";
-                a = false
-            } else {
-                a = true
-                el.style.borderBottomColor = "#478a47";
-            }
-            checkSecond(p2)
-            submitSwitcher()
-        }
-
-        function checkSecond(el){
-            const p1 = document.getElementById("pass1").value;
-            if (el.value !== p1) {
-                el.style.borderBottomColor = "#934B4B";
-                b = false
-            } else {
-                el.style.borderBottomColor = "#478a47";
-                b = true
-            }
-            submitSwitcher()
-        }
-
-        function submitSwitcher(){
-            let submit = document.getElementById("submit")
-            let shark = document.getElementById("left-block").children[0]
-            if (a && b){
-                submit.style.outlineWidth = "2px"
-                submit.style.cursor = "pointer"
-                submit.style.color = "#003a59"
-                submit.disabled = false
-                shark.style.outlineWidth = "30px"
-
-            } else {
-                submit.style.outlineWidth = "0px"
-                submit.style.cursor = "default"
-                submit.style.color = "#809caa"
-                submit.disabled = true
-                shark.style.outlineWidth = "2px"
-            }
-        }
-    </script>
+    <script src="res/script/twopasscheck.js"></script>
+    <script>c = true</script>
 </head>
 <body>
 <div id="left-block">
@@ -113,7 +66,8 @@
         <p>Пора создать вам пароль!</p>
         <div id="message" style="display: {{if .message}} block {{else}} none {{end}}">{{.message}}</div>
         <label>
-            <input name="pass1" type="password" id="pass1" oninput="checkFirst(this)"
+            <input name="pass1" type="password" id="pass1"
+                   oninput="checkFirst(this, {{if .check}}true{{else}}false{{end}}, {{.username}})"
                    readonly onfocus="this.removeAttribute('readonly')" placeholder="Введите пароль" required>
         </label>
         <label>

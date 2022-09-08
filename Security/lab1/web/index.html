@@ -8,26 +8,33 @@
         #uinputter{
             width: 80%;
         }
+        #message{
+            width: 30%;
+            margin: 5% auto;
+        }
+        main{
+        }
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <a href="/newpass">Сменить мой пароль</a>
+            <span>Пользователь: {{.username}}</span>
+            <a href="/changepass">Сменить мой пароль</a>
             <a href="/logout">Выход</a>
         </nav>
     </header>
     <main>
-        <h1>Привет, {{.username}}</h1>
+        <div id="message" style="display: {{if .message}} block {{else}} none {{end}}">{{.message}}</div>
         {{if .Table}}
         <div id="usertable">
             <div class="row">
                 <div class="name">Логин</div>
-                <div class="is_blocked">Заблокирован?</div>
+                <div>Заблокирован?</div>
                 <div class="button_cell">
                     Вкл/Выкл блокировку
                 </div>
-                <div class="is_good">Ограничения на пароль?</div>
+                <div>Ограничения на пароль?</div>
                 <div class="button_cell">
                     Вкл/Выкл ограничения
                 </div>
@@ -37,11 +44,17 @@
                 <div class="name">{{.Login}}</div>
                 <div class="is_blocked">{{.IsBlocked}}</div>
                 <div class="button_cell">
-                    <input formaction="./changeBlock?user={{.Login}}" type="button" value="Изменить">
+                    <form method="GET" action="./changeblock">
+                        <input type="hidden" name="user" value="{{.Login}}">
+                        <input type="submit" value="Изменить">
+                    </form>
                 </div>
-                <div class="is_good">{{.IsGoodPass}}</div>
+                <div class="is_good">{{.PassRestr}}</div>
                 <div class="button_cell">
-                    <input formaction="./changeRestr?user={{.Login}}" type="button" value="Изменить">
+                    <form method="GET" action="./changerestr">
+                        <input type="hidden" name="user" value="{{.Login}}">
+                        <input type="submit" value="Изменить">
+                    </form>
                 </div>
             </div>
             {{end}}
@@ -61,7 +74,6 @@
                 </div>
             </div>
         </div>
-        <a href="./adduser">Добавить пользователя</a>
         {{end}}
     </main>
 </body>

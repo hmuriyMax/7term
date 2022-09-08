@@ -8,6 +8,14 @@ import (
 	"os"
 )
 
+type User struct {
+	Login       string
+	Pass        string
+	IsBlocked   bool
+	PassRestr   bool
+	IsSuperuser bool
+}
+
 type Database struct {
 	filepath string
 	parsed   []*User
@@ -25,7 +33,7 @@ func (db *Database) Open(filepath string) (bool, error) {
 			log.Printf("Error while creating db at %s...\n", db.filepath)
 			return false, err
 		}
-		db.parsed = append(db.parsed, &User{Login: "ADMIN", IsSuperuser: true})
+		db.parsed = append(db.parsed, &User{Login: "ADMIN", IsSuperuser: true, PassRestr: true})
 		fl = true
 	} else {
 		err := db.Parse()

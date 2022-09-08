@@ -39,11 +39,11 @@ nav > * {
 }
 
 main{
-    margin-top: 60px;
+    margin-top: 80px;
 }
 
 #usertable{
-    margin: 5% auto;
+    margin: 0 auto;
     width: 50%;
     min-width: 50%;
     font-size: 0.9em;
@@ -65,3 +65,18 @@ main{
     text-align: center;
 }
 
+.is_blocked, .is_good{
+    text-transform: uppercase;
+}
+
+#message{
+    margin: 20px auto;
+    text-align: center;
+    font-size: 0.8em;
+    outline: 2px solid #7e2b2b;
+    background-color: #9d6767;
+    color: white;
+    border-radius: 2px;
+    padding: 5px;
+    font-weight: bold;
+}
