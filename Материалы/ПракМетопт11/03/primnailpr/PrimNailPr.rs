@@ -1,0 +1,7 @@
+primnailpr.PrimNailPr_cmbInt_actionAdapter
+primnailpr.PrimNailPr_btnClear_actionAdapter
+primnailpr.PrimNailPr_btnBack_actionAdapter
+primnailpr.PrimNailPr_btnClose_actionAdapter
+primnailpr.PrimNailPr_btnNext_actionAdapter
+primnailpr.PrimNailPr_btnNew_actionAdapter
+primnailpr.PrimNailPr

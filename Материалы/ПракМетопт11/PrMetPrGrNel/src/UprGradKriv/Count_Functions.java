@@ -1,0 +1,386 @@
+package UprGradKriv;
+
+import java.awt.*;
+
+public class Count_Functions extends UprGradKriv{
+  public Count_Functions() {
+  }
+
+  public static double gradx(double x1,double x2)
+   {
+     double p=2*(A+B*M*M)*x1+2*(-A*Cx-B*M*Cy)+2*(A*K+B*M)*x2;
+     //p=((double)((int)(p*10)))/(double)10;
+     return p;
+   }
+
+  public static double grady(double x1,double x2)
+   {
+     double p=2*(A*K+B*M)*x1+2*(-A*K*Cx-B*Cy)+2*(A*K*K+B)*x2;
+    // p=((double)((int)(p*10)))/(double)10;
+     return p;
+   }
+public static double norma(double x1, double x2)
+{
+  return Math.sqrt(x1*x1+x2*x2);
+}
+
+ public static double stepT(double x1,double x2,double d1,double d2)
+ {
+   double t=0,zt,z1,z2;
+   zt=A*(d1+K*d2)*(d1+K*d2)+B*(d2+M*d1)*(d2+M*d1);
+   z1=A*(d1+K*d2)*(x1-Cx+K*x2);
+   z2=B*(d2+M*d1)*(x2-Cy+M*x1);
+   t=-(z1+z2)/zt;
+   return t;
+ }
+ public static double stepT_g1(double x1,double x2,double d1,double d2)
+ {
+   double t=0,descr=0;
+   //descr=(2*a1*d2*(x2-c1)-d1)*(2*a1*d2*(x2-c1)-d1)-4*a1*d2*d2*(b1-x1+a1*(x2-c1)*(x2-c1));
+   //t=((-2*a1*d2*(x2-c1)-d1)-Math.sqrt(descr))/2*a1*d2*d2;
+   descr=(2*a1*d2*(x2-c1)-d1)*(2*a1*d2*(x2-c1)-d1)-4*a1*d2*d2*(a1*(x2-c1)*(x2-c1)+b1-x1);
+   t=(-2*a1*d2*(x2-c1)+d1+Math.sqrt(descr))/(2*a1*d2*d2);
+   return t;
+ }
+ public static double stepT_g2(double x1,double x2,double d1,double d2)
+ {
+   double t=0,descr=0;
+     descr=(2*a2*d1*(x1-c2)-d2)*(2*a2*d1*(x1-c2)-d2)-4*a2*d1*d1*(b2-x2+a2*(x1-c2)*(x1-c2));
+     t=(-2*a2*d1*(x1-c2)+d2+Math.sqrt(descr))/(2*a2*d1*d1);
+     return t;
+
+ }
+
+ public static double stepT_g3(double x1,double x2,double d1,double d2)
+ {
+   double t=0;
+   t=(a3*c3+x2-b3-a3*x1)/(a3*d1-d2);
+   return t;
+ }
+ public static double stepT_g4(double x1,double x2,double d1,double d2)
+ {
+   double t=0;
+   t=(a4*c4+x2-b4-a4*x1)/(a4*d1-d2);
+   return t;
+ }
+
+  public static double g1x(double x1,double x2)
+    {
+      double p=a1*(x2-c1)*(x2-c1)+b1-x1;
+     // p=((double)((int)(p*10)))/(double)10;
+      return p;
+    }
+  public static double g2x(double x1,double x2)
+    {
+      double p=a2*(x1-c2)*(x1-c2)+b2-x2;
+    //  p=((double)((int)(p*10)))/(double)10;
+      return p;
+    }
+  public static double g3x(double x1,double x2)
+    {
+      double p=a3*(x1-c3)+b3-x2;
+   //   p=((double)((int)(p*10)))/(double)10;
+      return p;
+    }
+
+  public static double g4x(double x1,double x2)
+    {
+      double p=a4*(x1-c4)+b4-x2;
+    //  p=((double)((int)(p*10)))/(double)10;
+      return p;
+    }
+
+    public static double grad_g1x(double x1,double x2,int d)
+      {
+        double p=0;
+        if(d==1)
+         p=-1;
+        if(d==2)
+         p=2*a1*(x2-c1);
+       // p=((double)((int)(p*10)))/(double)10;
+        return p;
+      }
+    public static double grad_g2x(double x1,double x2,int d)
+      {
+        double p=0;
+        if(d==1)
+         p=2*a2*(x1-c2);
+        if(d==2)
+         p=-1;
+      //  p=((double)((int)(p*10)))/(double)10;
+        return p;
+      }
+    public static double grad_g3x(double x1,double x2,int d)
+      {
+        double p=0;
+        if(d==1)
+         p=a3;
+        if(d==2)
+         p=-1;
+     //   p=((double)((int)(p*10)))/(double)10;
+        return p;
+      }
+
+    public static double grad_g4x(double x1,double x2,int d)
+      {
+        double p=0;
+        if(d==1)
+         p=a4;
+        if(d==2)
+         p=-1;
+      //  p=((double)((int)(p*10)))/(double)10;
+        return p;
+      }
+
+
+  public static String gx(int k)
+  {
+   String str="";
+   if(k==1)
+   {
+
+    if((int)(a1*10)%10==0){
+     if(a1!=1)str=""+(int)a1+"x&{2}{2}";
+     else str="x&{2}{2}";
+     if(-2*a1*c1>0) str+=" + "+(int)(-2*a1*c1)+"x_{2}";
+     if(-2*a1*c1<0) str+=" - "+(int)(2*a1*c1)+"x_{2}";
+     if(a1*c1*c1+b1>0) str+=" + "+(int)(a1*c1*c1+b1);
+     if(a1*c1*c1+b1<0) str+=" - "+(int)(-(a1*c1*c1+b1));
+     str+=" - x_{1}";
+    }
+    else{
+     double k1=(-2*a1*c1),k2=(a1*c1*c1+b1);
+     k1=((double)((int)(k1*10)))/(double)10;
+     k2=((double)((int)(k2*10)))/(double)10;
+     if(a1!=1)str=""+a1+"x&{2}{2}";
+     else str="x&{2}{2}";
+     if(-2*a1*c1>0) str+=" + "+k1+"x_{2}";
+     if(-2*a1*c1<0) str+=" - "+(-k1)+"x_{2}";
+     if(a1*c1*c1+b1>0) str+=" + "+k2;
+     if(a1*c1*c1+b1<0) str+=" - "+(-k2);
+     str+=" - x_{1}";
+    }
+   }
+   if(k==11)
+   {
+
+    if((int)(a1*10)%10==0){
+     if(a1!=1)str=""+(int)a1+"(x_{2}";
+     else str="(x_{2}";
+     if(c1>0) str+=" - "+(int)c1;
+     if(c1<0) str+=" + "+(int)(-c1);
+     str+=")^{2}";
+     if(b1>0) str+=" + "+(int)b1;
+     if(b1<0) str+=" - "+(int)(-b1);
+     str+=" - x_{1}";
+    }
+    else{
+     if(a1!=1)str=""+a1+"(x_{2}";
+     else str="(x_{2}";
+     if(c1>0) str+=" - "+(int)c1;
+     if(c1<0) str+=" + "+(int)(-c1);
+     str+=")^{2}";
+     if(b1>0) str+=" + "+(int)b1;
+     if(b1<0) str+=" - "+(int)(-b1);
+     str+=" - x_{1}";
+    }
+
+   }
+   if(k==2)
+   {
+
+    if((int)(a2*10)%10==0){
+     if(a2!=1)str=""+(int)a2+"x&{1}{2}";
+     else str="x&{1}{2}";
+     if(-2*a2*c2>0) str+=" + "+(int)(-2*a2*c2)+"x_{1}";
+     if(-2*a2*c2<0) str+=" - "+(int)(2*a2*c2)+"x_{1}";
+     if(a2*c2*c2+b2>0) str+=" + "+(int)(a2*c2*c2+b2);
+     if(a2*c2*c2+b2<0) str+=" - "+(int)(-(a2*c2*c2+b2));
+     str+=" - x_{2}";
+    }
+    else{
+     double k1=(-2*a2*c2),k2=(a2*c2*c2+b2);
+     k1=((double)((int)(k1*10)))/(double)10;
+     k2=((double)((int)(k2*10)))/(double)10;
+     if(a2!=1)str=""+a2+"x&{1}{2}";
+     else str="x&{1}{2}";
+     if(-2*a2*c2>0) str+=" + "+k1+"x_{1}";
+     if(-2*a2*c2<0) str+=" - "+(-k1)+"x_{1}";
+     if(a2*c2*c2+b2>0) str+=" + "+k2;
+     if(a2*c2*c2+b2<0) str+=" - "+(-k2);
+     str+=" - x_{2}";
+    }
+   }
+   if(k==22)
+   {
+
+    if((int)(a2*10)%10==0){
+     if(a2!=1)str=""+(int)a2+"(x_{1}";
+     else str="(x_{1}";
+     if(c2>0) str+=" - "+(int)c2;
+     if(c2<0) str+=" + "+(int)(-c2);
+     str+=")^{2}";
+     if(b2>0) str+=" + "+(int)b2;
+     if(b2<0) str+=" - "+(int)(-b2);
+     str+=" - x_{2}";
+    }
+    else{
+     if(a2!=1)str=""+a2+"(x_{1}";
+     else str="(x_{1}";
+     if(c2>0) str+=" - "+(int)c2;
+     if(c2<0) str+=" + "+(int)(-c2);
+     str+=")^{2}";
+     if(b2>0) str+=" + "+(int)b2;
+     if(b2<0) str+=" - "+(int)(-b2);
+     str+=" - x_{2}";
+    }
+
+   }
+
+   if(k==3)
+   {
+
+     if(a3!=1)str=""+(int)a3+"x_{1}";
+     if(a3==1) str="x_{1}";
+     if(a3==-1) str="-x_{1}";
+     if(-a3*c3+b3>0) str+=" + "+(int)(-a3*c3+b3);
+     if(-a3*c3+b3<0) str+=" - "+(int)(a3*c3-b3);
+     str+=" - x_{2}";
+    }
+    if(k==33)
+    {
+
+      if(a3!=1)str=""+(int)a3+"(x_{1}";
+      if(a3==1) str="(x_{1}";
+      if(a3==-1) str="-(x_{1}";
+      if(c3>0) str+=" - "+(int)c3;
+      if(c3<0) str+=" + "+(int)(-c3);
+      str+=")";
+      if(b3>0) str+=" + "+(int)b3;
+      if(b3<0) str+=" - "+(int)(-b3);
+      str+=" - x_{2}";
+     }
+
+     if(k==4)
+     {
+
+       if(a4!=1)str=""+(int)a4+"x_{1}";
+       if(a4==1) str="x_{1}";
+       if(a4==-1) str="-x_{1}";
+       if(-a4*c4+b4>0) str+=" + "+(int)(-a4*c4+b4);
+       if(-a4*c4+b4<0) str+=" - "+(int)(a4*c4-b4);
+       str+=" - x_{2}";
+      }
+      if(k==44)
+      {
+
+        if(a4!=1)str=""+(int)a4+"(x_{1}";
+        if(a4==1) str="(x_{1}";
+        if(a4==-1) str="-(x_{1}";
+        if(c4>0) str+=" - "+(int)c4;
+        if(c4<0) str+=" + "+(int)(-c4);
+        str+=")";
+        if(b4>0) str+=" + "+(int)b4;
+        if(b4<0) str+=" - "+(int)(-b4);
+        str+=" - x_{2}";
+       }
+
+   return str;
+  }
+
+  public static String strFunction(int k)
+  {
+    String str="f(x) = ";
+    if(k==1)
+    {
+     if((A+B*M*M)!=1) str+=(A+B*M*M)+"x&{1}{2}";
+     else str+="x&{1}{2}";
+     if(2*(-A*Cx-B*M*Cy)!=0)
+     {
+       if(2*(-A*Cx-B*M*Cy)>0) str+=" + "+2*(-A*Cx-B*M*Cy)+"x_{1}";
+       else str+=" - "+(-2)*(-A*Cx-B*M*Cy)+"x_{1}";
+     }
+     if(2*(A*K+B*M)!=0)
+     {
+       if(2*(A*K+B*M)>0) str+=" + "+2*(A*K+B*M)+"x_{1}x_{2}";
+       else str+=" - "+(-2)*(A*K+B*M)+"x_{1}x_{2}";
+     }
+     if(2*(-A*K*Cx-B*Cy)!=0)
+     {
+       if(2*(-A*K*Cx-B*Cy)>0) str+=" + "+2*(-A*K*Cx-B*Cy)+"x_{2}";
+       else str+=" - "+(-2)*(-A*K*Cx-B*Cy)+"x_{2}";
+     }
+     if((A*K*K+B)>0) str+=" + ";
+     if((A*K*K+B)!=1) str+=(A*K*K+B)+"x&{2}{2}";
+     else str+="x&{2}{2}";
+     if((A*Cx*Cx+B*Cy*Cy)!=0)
+     {
+       if((A*Cx*Cx+B*Cy*Cy)>0) str+=" + "+(A*Cx*Cx+B*Cy*Cy);
+       else str+=" - "+(-1)*(A*Cx*Cx+B*Cy*Cy);
+     }
+    }
+
+    if(k==2)
+    {
+      if(A!=1) str+=A+"(x_{1}";
+      else str+="(x_{1}";
+      if(Cx!=0)
+      {
+        if(Cx>0) str+=" - "+Cx;
+        else str+=" + "+(-1)*Cx;
+      }
+      if(K!=0)
+      {
+        if(K>0) { if(K!=1) str+=" + "+K+"x_{2}"; else str+=" + x_{2}";}
+        else { if(K!=-1) str+=" - "+(-1)*K+"x_{2}"; else str+=" - x_{2}";}
+      }
+      str+=")&{}{2} + ";
+      if(B!=1) str+=B+"(x_{2}";
+      else str+="(x_{2}";
+      if(Cy!=0)
+      {
+        if(Cy>0) str+=" - "+Cy;
+        else str+=" + "+(-1)*Cy;
+      }
+      if(M!=0)
+      {
+        if(M>0) { if(M!=1) str+=" + "+M+"x_{1}"; else str+=" + x_{1}";}
+        else { if(M!=-1) str+=" - "+(-1)*M+"x_{1}"; else str+=" - x_{1}";}
+      }
+      str+=")&{}{2}";
+    }
+
+    if(k==3)
+    {
+     str="";
+     str+="( "+2*(A+B*M*M)+"x_{1}";
+     if(2*(A*K+B*M)!=0)
+     {
+       if(2*(A*K+B*M)>0) str+=" + "+2*(A*K+B*M)+"x_{2}";
+       else str+=" - "+(-2)*(A*K+B*M)+"x_{2}";
+     }
+     if(2*(-A*Cx-B*M*Cy)!=0)
+     {
+       if(2*(-A*Cx-B*M*Cy)>0) str+=" + "+2*(-A*Cx-B*M*Cy);
+       else str+=" - "+(-2)*(-A*Cx-B*M*Cy);
+     }
+
+     str+="; "+2*(A*K*K+B)+"x_{2}";
+
+     if(2*(A*K+B*M)!=0)
+     {
+       if(2*(A*K+B*M)>0) str+=" + "+2*(A*K+B*M)+"x_{1}";
+       else str+=" - "+(-2)*(A*K+B*M)+"x_{1}";
+     }
+     if(2*(-A*K*Cx-B*Cy)!=0)
+     {
+       if(2*(-A*K*Cx-B*Cy)>0) str+=" + "+2*(-A*K*Cx-B*Cy);
+       else str+=" - "+(-2)*(-A*K*Cx-B*Cy);
+     }
+     str+=" )";
+    }
+
+    return str;
+  }
+
+}

@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<title>
+HTML Test Page
+</title>
+</head>
+<body bgcolor="#E9F3FE">
+<p align="center">
+<div align="center">
+<table border="1" width="40%" bordercolor="#000080">
+        <tr>
+          <td width="100%" align="center">
+<applet
+  codebase = "."
+  code     = "appupr1.AppUpr1.class"
+  name     = "TestApplet"
+  width    = "616"
+  height   = "540"
+  hspace   = "0"
+  vspace   = "0"
+  align    = "middle"
+>
+</applet>
+</td>
+        </tr>
+      </table>
+</div>
+</body>
+</html>

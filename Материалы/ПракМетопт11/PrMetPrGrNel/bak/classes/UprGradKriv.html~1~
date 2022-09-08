@@ -1,0 +1,23 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<title>
+HTML Test Page
+</title>
+</head>
+<body>
+cylinder.AppCylinder will appear below in a Java enabled browser.<br>
+<applet
+  codebase = "."
+  code     = "cylinder.AppCylinder.class"
+  name     = "TestApplet"
+  width    = "189"
+  height   = "50"
+  hspace   = "0"
+  vspace   = "0"
+  align    = "middle"
+>
+<param name="imgFon" value="Fon.jpg">
+</applet>
+</body>
+</html>

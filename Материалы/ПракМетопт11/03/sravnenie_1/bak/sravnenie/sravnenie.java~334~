@@ -1,0 +1,738 @@
+package sravnenie;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.applet.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class sravnenie extends JApplet {
+  Image pic;
+  Image pict;
+        private boolean isStandalone = false;
+        Container cp;
+        JButton nextButton = new JButton();
+        JButton refreshButton = new JButton();
+        JButton jButton1 = new JButton();
+//******************************************************************************
+  static    Color ColorFon = new Color(247,247,255);//Цвет фона
+  //Панели:
+public    Color ColorPanelFon = new Color(255,255,255);//Цвет фона
+public    Color ColorPanelRamka = new Color(157,187,255);//Цвет обрамления
+  //Кнопки:
+public    Color ColorBtnBackground = new Color(220,230,255);//Цвет фона кнопки
+public    Color ColorBtnForeground = new Color(0,0,60);//Цвет надписи на кнопке
+public    Font FontBtn= new java.awt.Font("Dialog", 1, 12);//Шрифт надписи на кнопке(кроме кнопок==> и <==)
+public    Font FontBtnStr= new java.awt.Font("Dialog", 1, 14);//Шрифт на кнопках ==> и <==
+  //Заголовок:
+public    Color ColorTitle = new Color(130,0,80);//Цвет
+public    Font FontTitle= new java.awt.Font("Dialog", 1, 16);//Шрифт
+  //Надписи (напр. "Графическая иллюстрация", "Решение", "Задача" и т.д.):
+public    Color ColorSubTitle = new Color(180,0,60);//Цвет
+public    Font FontSubTitle= new java.awt.Font("Dialog", 3, 12);
+   //скролинг сравнения
+  JScrollPane jScrollPane1 = new JScrollPane();
+
+  JButton downButton = new JButton();
+  JButton upButton = new JButton();
+  JButton zoomInButton = new JButton();
+  JLabel jLabel6 = new JLabel();
+  JButton rightButton = new JButton();
+  //панель сравнения
+  DrawPanels drawPanel1 = new DrawPanels();
+
+  JButton leftButton = new JButton();
+  JLabel jLabel7 = new JLabel();
+  JButton zoomOutButton = new JButton();
+  JCheckBox resultBox = new JCheckBox();
+    JLabel jLabel1 = new JLabel();
+
+  JTabbedPane jTabbedPane1 = new JTabbedPane();
+  //панель ньютона
+ // JPanel jPanel1_nju = new JPanel();
+  Panel1_nju jPanel1_nju = new Panel1_nju();
+  //скролинг ньютона
+  JScrollPane jScrollPane2_nju = new JScrollPane();
+  TitledBorder titledBorder1;
+   //скролинг ньютона-рафсона
+  JScrollPane jScrollPane2 = new JScrollPane();
+  TitledBorder titledBorder2;
+   //панель ньютона-рафсона
+ // JPanel jPanel1 = new JPanel();//Шрифт
+   Panel jPanel1 = new Panel();
+
+  Panel_pict jPanel2 = new Panel_pict();
+        //Get a parameter value
+        public String getParameter(String key, String def) {
+                return isStandalone ? System.getProperty(key, def) :
+                        (getParameter(key) != null ? getParameter(key) : def);
+        }
+        //Initialize the applet
+        public void init() {
+                try {
+                        jbInit();
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                Image img1;
+                MediaTracker tr=new MediaTracker(this);
+                img1=getImage(getCodeBase(), "images/upr2.jpg");
+                try {
+                        tr.waitForAll(5000);
+                } catch(InterruptedException e) {}
+                drawPanel1.img1 = img1;
+
+                this.jLabel6.setVisible(false);
+                this.zoomInButton.setVisible(true);
+                this.zoomOutButton.setVisible(true);
+                this.upButton.setVisible(true);
+                this.downButton.setVisible(true);
+                this.leftButton.setVisible(true);
+                this.rightButton.setVisible(true);
+
+                drawPanel1.setFunc(0);
+                drawPanel1.setOwner(this);
+        }
+
+        //Component initialization
+        private void jbInit() throws Exception {
+           pic = getImage(getCodeBase(), "Njuton.jpg");
+            pict=getImage(getCodeBase(), "Sravn_1.jpg");
+                cp = this.getContentPane();
+                titledBorder1 = new TitledBorder("");
+    titledBorder2 = new TitledBorder("");
+    cp.setLayout(null);
+                //panel
+                this.getContentPane().setBackground(ColorFon);
+                this.setSize(new Dimension(548, 617));
+                //knopki
+                nextButton.setBackground(ColorBtnBackground);
+                nextButton.setBounds(345, 562, 100, 23);
+                nextButton.setFont(new java.awt.Font("Dialog", 1, 12));
+                nextButton.setForeground(ColorBtnForeground);
+                nextButton.setFont(FontBtnStr);
+                nextButton.setText("==>");
+                nextButton.addActionListener(new  sravnenie_nextButton_actionAdapter(this));
+
+                jButton1.setBackground(ColorBtnBackground);
+                jButton1.setBounds(105, 562, 100, 23);
+                jButton1.setFont(FontBtnStr);
+                jButton1.setForeground(ColorBtnForeground);
+                jButton1.setText("<==");
+                jButton1.addActionListener(new sravnenie_jButton1_actionAdapter(this));
+
+                refreshButton.setText("Обновить");
+                refreshButton.addActionListener(new sravnenie_refreshButton_actionAdapter(this));
+                refreshButton.setForeground(ColorBtnForeground);
+                refreshButton.setFont(FontBtn);
+                refreshButton.setBounds(225, 562, 100, 23);
+                refreshButton.setBackground(ColorBtnBackground);
+                //title
+                //mastab//|^//->//<-
+
+
+    cp.setBackground(ColorFon);
+
+    downButton.setVisible(true);
+    downButton.addActionListener(new sravnenie_downButton_actionAdapter(this));
+    downButton.setText("\u2193");
+    downButton.addActionListener(new sravnenie_downButton_actionAdapter(this));
+    downButton.setMargin(new Insets(0, 0, 0, 0));
+    downButton.setForeground(ColorBtnForeground);
+    downButton.setFont(FontBtn);
+    downButton.setBounds(new Rectangle(492, 255+20, 20, 20));
+    downButton.setBackground(ColorBtnBackground);
+
+    upButton.setVisible(true);
+    upButton.addActionListener(new sravnenie_upButton_actionAdapter(this));
+    upButton.setText("\u2191");
+    upButton.addActionListener(new sravnenie_upButton_actionAdapter(this));
+    upButton.setMargin(new Insets(0, 0, 0, 0));
+    upButton.setForeground(ColorBtnForeground);
+    upButton.setFont(FontBtn);
+    upButton.setBounds(new Rectangle(469, 255+20, 20, 20));
+    upButton.setBackground(ColorBtnBackground);
+
+    zoomInButton.setVisible(true);
+    zoomInButton.setBackground(ColorBtnBackground);
+    zoomInButton.setBounds(new Rectangle(377, 255+20, 20, 20));
+    zoomInButton.setFont(FontBtn);
+    zoomInButton.setForeground(ColorBtnForeground);
+    zoomInButton.setMargin(new Insets(0, 0, 0, 0));
+    zoomInButton.setText("+");
+    zoomInButton.addActionListener(new sravnenie_zoomInButton_actionAdapter(this));
+    zoomInButton.addActionListener(new sravnenie_zoomInButton_actionAdapter(this));
+
+    rightButton.setVisible(true);
+    rightButton.addActionListener(new sravnenie_rightButton_actionAdapter(this));
+    rightButton.setText("\u2192");
+    rightButton.addActionListener(new sravnenie_rightButton_actionAdapter(this));
+    rightButton.setMargin(new Insets(0, 0, 0, 0));
+    rightButton.setForeground(ColorBtnForeground);
+    rightButton.setFont(FontBtn);
+    rightButton.setBounds(new Rectangle(446, 255+20, 20, 20));
+    rightButton.setBackground(ColorBtnBackground);
+
+    leftButton.setVisible(true);
+    leftButton.addActionListener(new sravnenie_leftButton_actionAdapter(this));
+    leftButton.setText("\u2190");
+    leftButton.addActionListener(new sravnenie_leftButton_actionAdapter(this));
+    leftButton.setMargin(new Insets(0, 0, 0, 0));
+    leftButton.setForeground(ColorBtnForeground);
+    leftButton.setFont(FontBtn);
+    leftButton.setBounds(new Rectangle(423, 255+20, 20, 20));
+    leftButton.setBackground(ColorBtnBackground);
+
+    jLabel7.setBounds(new Rectangle(377, 282+18, 100, 16));
+    //jLabel7.setText("Результаты:");
+    jLabel7.setForeground(ColorSubTitle);
+    jLabel7.setFont(FontSubTitle);
+
+    zoomOutButton.setVisible(true);
+    zoomOutButton.addActionListener(new sravnenie_zoomOutButton_actionAdapter(this));
+    zoomOutButton.setText("-");
+    zoomOutButton.addActionListener(new sravnenie_zoomOutButton_actionAdapter(this));
+    zoomOutButton.setMargin(new Insets(0, 0, 0, 0));
+    zoomOutButton.setForeground(ColorBtnForeground);
+    zoomOutButton.setFont(FontBtn);
+    zoomOutButton.setBounds(new Rectangle(400, 255+20, 20, 20));
+    zoomOutButton.setBackground(ColorBtnBackground);
+
+    resultBox.setBackground(ColorFon);
+    resultBox.setText("");
+    resultBox.setBounds(new Rectangle(469, 280+19, 26,15));
+    resultBox.addItemListener(new sravnenie_resultBox_itemAdapter(this));
+    resultBox.addActionListener(new sravnenie_resultBox_actionAdapter(this));
+     resultBox.setVisible(false);
+
+    jLabel6.setBounds(new Rectangle(20, 20, 0, 0));
+       jLabel1.setFont(FontTitle);
+	jLabel1.setForeground(ColorTitle);
+	jLabel1.setRequestFocusEnabled(true);
+	jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+	jLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
+	jLabel1.setText("Сравнение методов Марквардта и Ньютона-Рафсона .");
+	jLabel1.setBounds(new Rectangle(0, 0, 551, 23));
+	jLabel1.setBounds(new Rectangle(0, 0, 551, 23));
+
+    jTabbedPane1.setBackground(new Color(240, 240, 255));
+    jTabbedPane1.setToolTipText("Всё о сравнениях");
+    jTabbedPane1.setBounds(new Rectangle(6, 40, 544, 518));
+
+//////////////скролинг сравнения
+  jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+  jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+  jScrollPane1.setBorder(BorderFactory.createLoweredBevelBorder());
+  jScrollPane1.setDebugGraphicsOptions(0);
+  jScrollPane1.getViewport().setBackground(SystemColor.inactiveCaptionText);
+  jScrollPane1.setBounds(new Rectangle(1, 60, 546, 477));
+
+//////////скролинг ньютона
+    jScrollPane2_nju.setPreferredSize(new Dimension(930,990));
+    jScrollPane2_nju.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jScrollPane2_nju.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    jScrollPane2_nju.setDebugGraphicsOptions(0);
+    jScrollPane2_nju.setBounds(new Rectangle(1, 60, 546, 477));
+    jScrollPane2_nju.getViewport().setBackground(SystemColor.inactiveCaptionText);
+    jScrollPane2_nju.setBorder(titledBorder1);
+//////////скролинг ньютона-рафсона
+    jScrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jScrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    jScrollPane2.setDebugGraphicsOptions(0);
+    jScrollPane2.setBounds(new Rectangle(1, 60, 546, 477));
+    jScrollPane2.getViewport().setBackground(SystemColor.inactiveCaptionText);
+    jScrollPane2.setBorder(titledBorder2);
+
+   // jPanel1.setLayout(null);
+
+    jPanel2.setBounds(new Rectangle(5, 26, 350, 270));
+    jPanel2.setLayout(null);
+    jPanel2.setVisible(true);
+
+    cp.add(nextButton, null);
+    cp.add(refreshButton, null);
+    cp.add(jButton1, null);
+    cp.add( jTabbedPane1, null);
+   // cp.add(jScrollPane1, null);
+
+
+    //jScrollPane1.getViewport().add(jScrollPane2_nju, null);
+    // jTabbedPane1.add(jPanel1_nju, "Описание метода Ньютона");
+    cp.add(jLabel1, null);
+    jTabbedPane1.add(jScrollPane1,"Сравнение методов");
+    jScrollPane1.add(drawPanel1,null);
+    jScrollPane1.getViewport().add(drawPanel1, null);
+    drawPanel1.setPreferredSize(new Dimension(700,600));
+    drawPanel1.setLayout(null);
+    drawPanel1.setBackground(ColorFon);
+    drawPanel1.add(resultBox, null);
+    drawPanel1.add(jLabel7, null);
+    drawPanel1.add(jLabel6, null);
+    drawPanel1.add(zoomInButton, null);
+    drawPanel1.add(zoomOutButton, null);
+    drawPanel1.add(leftButton, null);
+    drawPanel1.add(rightButton, null);
+    drawPanel1.add(upButton, null);
+    drawPanel1.add(downButton, null);
+
+    drawPanel1.add(jPanel2, null);
+
+    //jTabbedPane1.add(jScrollPane2_nju, "Описание метода Ньютона");
+    jScrollPane2_nju.add(jPanel1_nju,null);
+    jScrollPane2_nju.getViewport().add( jPanel1_nju, null);
+    jPanel1_nju.setPreferredSize(new Dimension(560,1500));
+    jPanel1_nju.setLayout(null);
+    jPanel1_nju.setToolTipText("Описание метода ньютона");
+    jPanel1_nju.setBackground(Color.white);
+
+     jTabbedPane1.add(jScrollPane2, "Описание метода Ньютона-Рафсона");
+     jScrollPane2.add(jPanel1,null);
+     jScrollPane2.getViewport().add( jPanel1, null);
+     jPanel1.setPreferredSize(new Dimension(560,1000));
+     jPanel1.setLayout(null);
+     jPanel1.setToolTipText("Описание метода ньютона-рафсона");
+     jPanel1.setBackground(Color.white);
+
+
+
+
+        }
+        //Get Applet information
+        public String getAppletInfo() {
+                return "Applet Information";
+        }
+        //Get parameter info
+        public String[][] getParameterInfo() {
+                return null;
+        }
+        //static initializer for setting look & feel
+        static {
+                try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception e) {
+                }
+        }
+
+        class  Panel_pict extends JPanel {
+            public void paintComponent(Graphics  y) {
+              super.paintComponent( y);
+                y.drawImage(pict,3,1, this);
+            }
+          }
+
+      class  Panel1_nju extends JPanel {
+     public void paintComponent(Graphics  resh) {
+       super.paintComponent( resh);
+       My_Stringer.setGraphics(resh);
+       resh.setColor(new Color(0, 0, 80));
+   My_Stringer.setGraphics(resh);
+   resh.setColor(new Color(180, 0, 60));
+   resh.setFont(new java.awt.Font("Dialog", 1, 30));
+   resh.drawString("Метод Ньютона  ",100,35);
+    resh.setColor(Color.black);
+   resh.setFont(new java.awt.Font("Dialog", 1, 12));
+   resh.drawString("Метод Ньютона - это метод второго порядка поиска безусловного экстремума.",10,60);
+   resh.setFont(new java.awt.Font("Dialog", 1, 16));
+   resh.drawString("Постановка задачи: ",100,80);
+   resh.setFont(new java.awt.Font("Dialog", 1, 12));
+    My_Stringer.drawString("Пусть дана функция f(x), ограниченная снизу на множестве R^{n} и имеющая",20,95);
+   resh.drawString("непрерывные частные производные во всех его точках. ",10,110);
+    My_Stringer.drawString("Требуется найти локальный минимум функции f(x) на множестве допустимых ",10,125);
+    My_Stringer.drawString("решений Х = R^{n}, то есть найти такую точку  x^{*} \u2208 R^{n}, что f(x^{*}) = min f(x), где f(x) \u2208 C^{2}.  ",10,140);
+   resh.setFont(new java.awt.Font("Dialog", 1, 16));
+    resh.drawString("Стратегия поиска: ",100,160);
+  resh.setFont(new java.awt.Font("Dialog", 1, 12));
+   My_Stringer.drawString("Стратегия метода Ньютона состоит в построении последовательности точек x^{k},",20,175);
+  My_Stringer.drawString(" k = 0,1,2,..., таких что f(x^{k+1}) < f(x^{k}), k = 0,1,2,... . ",10,190);
+My_Stringer.drawString("Точки последовательности  x^{k} вычисляются по правилу",10,205);
+  My_Stringer.drawString("x^{k+1} = x^{k} + d^{k}, k = 0,1,2,... ,                     (1) ",100,220);
+My_Stringer.drawString("где точка x^{0} задаётся пользователем, а направление спуска d^{k} определяется для ",10,235);
+ My_Stringer.drawString("каждого значения k по формуле ",10,250);
+ My_Stringer.drawString("d^{k} = - H^{-1}(x^{k})\u2207f(x^{k})                                   (2) ",100,265);
+My_Stringer.drawString("Выбор d^{k} по формуле (2) гарантирует выполнение требования f(x^{k+1}) < f(x^{k}) при",10,280);
+ My_Stringer.drawString("условии, что H(x^{k}) > 0. Формула (2) получена из следующих соображений:",10,295);
+My_Stringer.drawString("1. Функция f(x) аппроксимируется в каждой точке последовательности x^{k}",20,310);
+  My_Stringer.drawString("квадратичной функцией F_{k} = f(x^{k}) + (\u2207f(x^{k}),d^{k}) + (1/2)*(d^{k},H(x^{k})d^{k}).",30,325);
+My_Stringer.drawString("2. Направление d^{k} определяется из необходимого условия экстремума первого",20,340);
+ My_Stringer.drawString(" порядка: dF_{k}/dd^{k} = 0. Таким образом, при выполнении требования H(x^{k}) > 0",30,355);
+  My_Stringer.drawString("последовательность является последовательностью точек минимумов ",30,370);
+   My_Stringer.drawString("квадратичных функций F_{k}, k = 0,1,...(см.рис.1). ",30,385);
+  My_Stringer.drawString("Чтобы обеспечить выполнение требования f(x^{k+1}) < f(x^{k}), k = 0,1,2,..., даже в тех ",10,400);
+ My_Stringer.drawString("случаях, когда для каких-либо значений матрица Гессе Н(x^{k}) не окажется",10,415);
+  My_Stringer.drawString("положительно определённой, рекомендуется для соответствующих значений k ",10,430);
+     My_Stringer.drawString("вычислить точку x^{k+1}  по  методу градиентного спуска x^{k+1} = x^{k} - t_{k}\u2207f(x^{k}) c выбором",10,445);
+My_Stringer.drawString(" величины шага t_{k} из условия f(x^{k} - t_{k}\u2207f(x^{k})) < f(x^{k}).",10,460);
+ My_Stringer.drawString("Построение последовательности x^{k} заканчивается в точке x^{k}, для которой ",20,475);
+My_Stringer.drawString("\u2225\u2207f(x^{k})\u2225 < \u03B5_{1}, где \u03B5_{1} - заданное малое положительное число, или при k \u2265 M",10,490);
+My_Stringer.drawString("(M - предельное число итераций), или при двукратном одновременном выполнении ",10,505);
+My_Stringer.drawString("двух неравенств \u2225 x^{k+1} - x^{k} \u2225 < \u03B5_{2}, |f(x^{k+1}) - f(x^{k})| < \u03B5_{2} , где \u03B5_{2} - малое",10,520);
+ My_Stringer.drawString("положительное число. ",10,535);
+   resh.drawImage(pic,0,550, this);
+    resh.setFont(new java.awt.Font("Dialog", 1, 16));
+resh.drawString("Сходимость:",100,1020);
+     resh.setFont(new java.awt.Font("Dialog", 1, 12));
+
+     resh.setColor(Color.red);
+     resh.drawString("Утверждение:",50,1035);
+     resh.setFont(new java.awt.Font("Dialog", 1, 12));
+     resh.setColor(Color.black);
+    My_Stringer.drawString("Пусть f(x) дважды непрерывно дифференцируемая сильно выпуклая функция с ",10,1050);
+     My_Stringer.drawString("константой l>0  на R^{n} и удовлетворяет условию \u2225 H(x) - H(y) \u2225 \u2264 L\u2225 x - y \u2225   x,y \u2208 R^{n},  ",10,1065);
+     My_Stringer.drawString("где L > 0, а начальная точка такова, что  ",10,1080);
+     My_Stringer.drawString("\u2225\u2207f(x^{0})\u2225 < (8*l^{2})/L, то есть  \u2225\u2207f(x^{0})\u2225 = (8*l^{2}*q)/L    (3), где q \u2208 (0,1).",10,1095);
+     My_Stringer.drawString("Тогда последовательность x^{k} сходится к точке минимума с квадратичной ",10,1110);
+      My_Stringer.drawString("скоростью \u2225 x^{k} - x^{*}\u2225  \u2264 (4*l^{2}*(q^{2})^{k})/L .",10,1125);
+     resh.setFont(new java.awt.Font("Dialog", 1, 16));
+     resh.setColor(Color.black);
+     resh.drawString("Процедура решения задачи:",100,1150);
+     resh.setFont(new java.awt.Font("Dialog", 1, 12));
+    My_Stringer.drawString("1. Используя алгоритм Ньютона, нужно построить точку x^{k}, в которой выполняется",10,1165);
+   resh.drawString("по крайней мере один критерий окончания расчётов.",20,1180);
+   My_Stringer.drawString("2. Так как f(x)\u2208 C^{2}, то нужно осуществить проверку выполнения достаточных условий ",10,1195);
+   My_Stringer.drawString("минимума H(x^{k}) > 0. Если условие выполнено, то точка x^{k} может рассматриваться  ",10,1210);
+   My_Stringer.drawString("как найденное приближение точки минимума x^{*}. Проверку выполнения достаточных ",10,1225);
+   My_Stringer.drawString("условий минимума можно заменить проверкой функции f(x) на выпуклость.",10,1240);
+   resh.setFont(new java.awt.Font("Dialog", 1, 16));
+     resh.drawString("Замечание:",100,1270);
+   resh.setFont(new java.awt.Font("Dialog", 1, 12));
+My_Stringer.drawString("1. Сходимость метода Ньютона доказана лишь для сильно выпуклых функций и для ",10,1285);
+My_Stringer.drawString("достаточно хорошего начального приближения, определяемого условием (3), ",10,1300);
+My_Stringer.drawString("практическое использование которого крайне затруднено, так как постоянные ",10,1315);
+My_Stringer.drawString("l(эл-маленькое) и L, как правило, неизвестны или требуют исследования для их",10,1330);
+My_Stringer.drawString("определения. Поэтому при практическом использовании метода Ньютона следует:",10,1345);
+My_Stringer.drawString("a) анализировать матрицу H(x^{k}) на выполнение условия H(x^{k}) > 0  k = 0,1,...",20,1360);
+My_Stringer.drawString("и заменять формулу x^{k+1} = x^{k} -  H^{-1}(x^{k})\u2207f(x^{k}) на формулу x^{k+1} = x^{k} -  t_{k}\u2207f(x^{k})",30,1375);
+
+My_Stringer.drawString("в случае его невыполнения;",30,1390);
+My_Stringer.drawString("б) производить анализ точки x^{k} c целью выяснения, является ли она найденным",20,1405);
+My_Stringer.drawString("приближением искомой точки x^{*}.",30,1420);
+My_Stringer.drawString("2. При решении задачи поиска безусловного максимума формула (2)",10,1435);
+My_Stringer.drawString("(представлена выше) не изменяется, так как в этом случае H(x^{k}) < 0.",10,1450);
+
+
+    }
+   }
+//////////////////////////////
+   class   Panel extends JPanel {
+public void paintComponent(Graphics  resh) {
+  super.paintComponent( resh);
+  My_Stringer.setGraphics(resh);
+      resh.setColor(new Color(0, 0, 80));
+  My_Stringer.setGraphics(resh);
+  resh.setColor(new Color(180, 0, 60));
+  resh.setFont(new java.awt.Font("Dialog", 1, 30));
+  resh.drawString("Метод Ньютона-Рафсона  ",70,35);
+   resh.setColor(Color.black);
+  resh.setFont(new java.awt.Font("Dialog", 1, 12));
+  resh.drawString("Метод Ньютона-Рафсона - это метод второго порядка поиска безусловного экстремума.",10,60);
+  resh.setFont(new java.awt.Font("Dialog", 1, 16));
+  resh.drawString("Постановка задачи: ",100,80);
+  resh.setFont(new java.awt.Font("Dialog", 1, 12));
+   My_Stringer.drawString("Пусть дана функция f(x), ограниченная снизу на множестве R^{n} и имеющая",20,95);
+  resh.drawString("непрерывные частные производные во всех его точках. ",10,110);
+   My_Stringer.drawString("Требуется найти локальный минимум функции f(x) на множестве допустимых ",10,125);
+   My_Stringer.drawString("решений Х = R^{n}, то есть найти такую точку  x^{*} \u2208 R^{n}, что f(x^{*}) = min f(x), где f(x) \u2208 C^{2}.  ",10,140);
+  resh.setFont(new java.awt.Font("Dialog", 1, 16));
+   resh.drawString("Стратегия поиска: ",100,160);
+ resh.setFont(new java.awt.Font("Dialog", 1, 12));
+  My_Stringer.drawString("Стратегия метода Ньютона-Рафсона состоит в построении последовательности ",20,175);
+ My_Stringer.drawString(" точек x^{k}, k = 0,1,2,..., таких что f(x^{k+1}) < f(x^{k}), k = 0,1,2,... . ",10,190);
+My_Stringer.drawString("Точки последовательности  x^{k} вычисляются по правилу",10,205);
+ My_Stringer.drawString("x^{k+1} = x^{k} - H^{-1}(x^{k})\u2207f(x^{k}) , k = 0,1,2,... ,                     (1) ",100,220);
+My_Stringer.drawString("где точка x^{0} задаётся пользователем, а величина шага t_{k} определяется из условия  ",10,235);
+My_Stringer.drawString("\u03C6(t_{k}) = f(x^{k} - H^{-1}(x^{k})\u2207f(x^{k})) \u2192 min (по t_{k})                 (2)",100,250);
+
+My_Stringer.drawString("Задача (2) может решаться либо аналитически с использованием необходимого",10,265);
+My_Stringer.drawString("условия минимума d\u03C6/dt_{k} = 0 c последующей проверкой достаточного",10,280);
+My_Stringer.drawString("условия d^{2}\u03C6/(dt_{k})^{2} > 0, либо численно как задача ",10,295);
+
+My_Stringer.drawString("\u03C6(t_{k}) \u2192 min (где t_{k}\u2208[a,b])                                            (3) ",100,310);
+ My_Stringer.drawString("где интервал [a,b] задаётся пользователем.",10,325);
+My_Stringer.drawString("Если функция \u03C6(t_{k}) достаточно сложна, то возможна её замена полиномом P(t_{k}) ",10,340);
+My_Stringer.drawString("второй или третьей степени и тогда шаг t_{k} может быть определён из ",10,355);
+ My_Stringer.drawString("условия dP/dt_{k} = 0 при выполнении условия d^{2}P/(dt_{k})^{2} > 0.",10,370);
+
+  My_Stringer.drawString("При численном решении задачи определения величины шага степень близости",10,385);
+ My_Stringer.drawString("найденного значения t_{k} к оптимальному значению (t_{k})^{*}, удовлетворяющему ",10,400);
+My_Stringer.drawString("условиям d\u03C6/dt_{k} = 0, d^{2}\u03C6/(dt_{k})^{2} > 0, зависит от задания интервала [a,b] ",10,415);
+ My_Stringer.drawString("и точности методов одномерной минимизации. ",10,430);
+
+    My_Stringer.drawString("Построение последовательности x^{k} заканчивается в точке x^{k}, для которой",10,445);
+My_Stringer.drawString("\u2225\u2207f(x^{k})\u2225 < \u03B5_{1}, где \u03B5_{1} - заданное малое положительное число, или при k \u2265 M   ",10,460);
+My_Stringer.drawString("(M - предельное число итераций)",10,475);
+
+My_Stringer.drawString("\u2225\u2207f(x^{k})\u2225 < \u03B5_{1}, где \u03B5_{1} - заданное малое положительное число, или при k \u2265 M",10,490);
+My_Stringer.drawString("(M - предельное число итераций), или при двукратном одновременном выполнении ",10,505);
+My_Stringer.drawString("двух неравенств \u2225 x^{k+1} - x^{k} \u2225 < \u03B5_{2}, |f(x^{k+1}) - f(x^{k})| < \u03B5_{2} , где \u03B5_{2} - малое",10,520);
+My_Stringer.drawString("положительное число. ",10,535);
+ // resh.drawImage(pic,0,550, this);
+   resh.setFont(new java.awt.Font("Dialog", 1, 16));
+resh.drawString("Сходимость:",100,560);
+    resh.setFont(new java.awt.Font("Dialog", 1, 12));
+
+    resh.setColor(Color.red);
+    resh.drawString("Утверждение:",50,575);
+    resh.setFont(new java.awt.Font("Dialog", 1, 12));
+    resh.setColor(Color.black);
+   My_Stringer.drawString("Пусть f(x) дважды непрерывно дифференцируема  и сильно выпукла на R^{n}, а матрица Гессе ",10,590);
+    My_Stringer.drawString("H(x) удовлетворяет условию Липшица \u2225 H(x) - H(y) \u2225 \u2264 L\u2225 x - y \u2225   , для любых x,y \u2208 R^{n}.  ",10,605);
+    My_Stringer.drawString("Тогда последовательность x^{k} сходится независимо от выбора начальной точки x^{0}",10,620);
+    My_Stringer.drawString("к точке минимума x^{*} c квадратичной скоростью ",10,635);
+    My_Stringer.drawString("\u2225 x^{k+1} - x^{k}\u2225  \u2264 (L/m)*(\u2225 x^{k} - x^{*}\u2225)^{2},",10,650);
+     My_Stringer.drawString("где m - оценка наименьшего собственного значения матрицы.",10,665);
+    resh.setFont(new java.awt.Font("Dialog", 1, 16));
+    resh.setColor(Color.black);
+    resh.drawString("Процедура решения задачи:",100,690);
+    resh.setFont(new java.awt.Font("Dialog", 1, 12));
+   My_Stringer.drawString("1. Используя алгоритм Ньютона -Рафсона, построить точку x^{k}, в которой выполняется",10,705);
+  resh.drawString("по крайней мере один критерий окончания расчётов.",20,720);
+  My_Stringer.drawString("2. Так как f(x)\u2208 C^{2}, то нужно осуществить проверку выполнения достаточных условий ",10,735);
+  My_Stringer.drawString("минимума H(x^{k}) > 0. Если условие выполнено, то точка x^{k} может рассматриваться  ",10,750);
+  My_Stringer.drawString("как найденное приближение точки минимума x^{*}. Проверку выполнения достаточных ",10,765);
+  My_Stringer.drawString("условий минимума можно заменить проверкой функции f(x) на выпуклость.",10,780);
+  resh.setFont(new java.awt.Font("Dialog", 1, 16));
+    resh.drawString("Замечание:",100,805);
+  resh.setFont(new java.awt.Font("Dialog", 1, 12));
+My_Stringer.drawString("  Сходимость  к точке минимума метода Ньютона-Рафсона гарантируется независимо от",10,820);
+My_Stringer.drawString("выбора начального приближения лишь для сильно выпуклых функций. Поэтому при  ",10,835);
+My_Stringer.drawString("практическом использовании метода Ньютона-Рафсона следует: ",10,850);
+My_Stringer.drawString("a) анализировать матрицу Гессе H(x^{k}) на выполнение условия H(x^{k}) > 0  k = 0,1,...",20,865);
+My_Stringer.drawString("и заменять формулу x^{k+1} = x^{k} - t_{k}H^{-1}(x^{k})\u2207f(x^{k}) на формулу x^{k+1} = x^{k} -  t_{k}\u2207f(x^{k})",30,880);
+My_Stringer.drawString("в случае его невыполнения;",30,895);
+My_Stringer.drawString("б) производить анализ точки x^{k} c целью выяснения, является ли она найденным",20,910);
+My_Stringer.drawString("приближением искомой точки x^{*}.",30,925);
+}
+}
+
+        void nextButton_actionPerformed(ActionEvent e) {
+                this.jLabel6.setVisible(true);
+                this.zoomInButton.setVisible(true);
+                this.zoomOutButton.setVisible(true);
+                this.upButton.setVisible(true);
+                this.downButton.setVisible(true);
+                this.leftButton.setVisible(true);
+                this.rightButton.setVisible(true);
+                jPanel2.setVisible(false);
+                if (DrawPanels.cc == DrawPanels.count - 1||DrawPanels.cc ==110) {
+                        return;
+                }
+                if (DrawPanels.ccm == DrawPanels.count - 1||DrawPanels.ccm==110) {
+                       return;
+               }
+
+                if(DrawPanels.cc==110||DrawPanels.ccm==110)nextButton.setEnabled(false);//34
+                if(DrawPanels.cc<110||DrawPanels.ccm<110)nextButton.setEnabled(true);//34
+                DrawPanels.cc++;
+                DrawPanels.ccm++;
+                if (DrawPanels.incPoints[DrawPanels.cc]||DrawPanels.incPoints[DrawPanels.ccm]) DrawPanels.totalPoints++;
+               drawPanel1.repaint();
+        }
+        void refreshButton_actionPerformed(ActionEvent e) {
+                Stringers.init();
+                jPanel2.setVisible(true);
+              // Stringers.init_m();
+                DrawPanels.setFunc(0);
+                this.jLabel6.setVisible(false);
+                this.zoomInButton.setVisible(true);
+                this.zoomOutButton.setVisible(true);
+                this.upButton.setVisible(true);
+                this.downButton.setVisible(true);
+                this.leftButton.setVisible(true);
+                this.rightButton.setVisible(true);
+                drawPanel1.repaint();
+        }
+        void zoomInButton_actionPerformed(ActionEvent e) {
+                DrawPanels.setScale_m(DrawPanels.scale * 1.2);
+                //DrawPanels.setScale(DrawPanels.scale * 1.2);
+               // DrawPanels.setScale_2(DrawPanels.scale /1.2);
+
+                drawPanel1.repaint();
+        }
+        void zoomOutButton_actionPerformed(ActionEvent e) {
+               DrawPanels.setScale_m(DrawPanels.scale / 1.2);
+             //   DrawPanels.setScale(DrawPanels.scale / 1.2);
+               // DrawPanels.setScale_2(DrawPanels.scale *1.2);
+
+                drawPanel1.repaint();
+        }
+        void upButton_actionPerformed(ActionEvent e) {
+                DrawPanels.moveCenter_m(0,-20);
+                DrawPanels.moveCenter(0,- 20);
+               // DrawPanels.moveCenter_2(0, 20);
+
+                drawPanel1.repaint();
+        }
+        void downButton_actionPerformed(ActionEvent e) {
+                DrawPanels.moveCenter_m(0,20);
+                DrawPanels.moveCenter(0,20);
+              // DrawPanels.moveCenter_2(0, -20);
+
+                drawPanel1.repaint();
+        }
+        void leftButton_actionPerformed(ActionEvent e) {
+                DrawPanels.moveCenter_m(-20,0);
+                DrawPanels.moveCenter(-20, 0);
+              // DrawPanels.moveCenter_2(20,0);
+
+                drawPanel1.repaint();
+        }
+        void rightButton_actionPerformed(ActionEvent e) {
+                DrawPanels.moveCenter_m(20,0);
+                DrawPanels.moveCenter(20, 0);
+               /// DrawPanels.moveCenter_2(-20,0);
+
+                drawPanel1.repaint();
+        }
+        void variantBox_actionPerformed(ActionEvent e) {
+                Stringers.init();
+              // Stringers.init_m();
+                DrawPanels.setFunc(0);
+                drawPanel1.repaint();
+        }
+        void jButton1_actionPerformed(ActionEvent e) {
+         //  if(DrawPanels.cc == 0)    {    jPanel2.setVisible(false);}
+                if(DrawPanels.cc == 1||DrawPanels.ccm == 1) {
+                        this.jLabel6.setVisible(false);
+                        this.zoomInButton.setVisible(true);
+                        this.zoomOutButton.setVisible(true);
+                        this.upButton.setVisible(true);
+                        this.downButton.setVisible(true);
+                        this.leftButton.setVisible(true);
+                        this.rightButton.setVisible(true);
+                }
+                if (DrawPanels.cc == 0||DrawPanels.ccm == 0) {
+                     // jPanel2.setVisible(true);
+                       this. jPanel2.setVisible(true);
+                        return;
+                }
+                if (DrawPanels.incPoints[DrawPanels.cc]||DrawPanels.incPoints[DrawPanels.ccm]) DrawPanels.totalPoints--;
+                DrawPanels.cc--;
+                DrawPanels.ccm--;
+                drawPanel1.repaint();
+        }
+  void resultBox_actionPerformed(ActionEvent e) {
+     if(resultBox.isSelected()==true)      {   jPanel2.setVisible(false);}
+        else   {   jPanel2.setVisible(true);}
+          drawPanel1.repaint();
+  }
+
+  void resultBox_itemStateChanged(ItemEvent e) {
+
+  }
+
+}
+class sravnenie_nextButton_actionAdapter implements java.awt.event.
+        ActionListener {
+        sravnenie adaptee;
+        sravnenie_nextButton_actionAdapter(sravnenie adaptee) {
+                this.adaptee = adaptee;
+        }
+        public void actionPerformed(ActionEvent e) {
+                adaptee.nextButton_actionPerformed(e);
+        }
+}
+class sravnenie_refreshButton_actionAdapter implements java.awt.event.
+        ActionListener {
+        sravnenie adaptee;
+        sravnenie_refreshButton_actionAdapter(sravnenie adaptee) {
+                this.adaptee = adaptee;
+        }
+        public void actionPerformed(ActionEvent e) {
+                adaptee.refreshButton_actionPerformed(e);
+        }
+}
+class sravnenie_jButton1_actionAdapter implements java.awt.event.ActionListener {
+        sravnenie adaptee;
+        sravnenie_jButton1_actionAdapter(sravnenie adaptee) {
+        this.adaptee = adaptee;
+        }
+        public void actionPerformed(ActionEvent e) {
+        adaptee.jButton1_actionPerformed(e);
+        }
+}
+
+class sravnenie_leftButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_leftButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.leftButton_actionPerformed(e);
+  }
+}
+
+class sravnenie_zoomInButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_zoomInButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.zoomInButton_actionPerformed(e);
+  }
+}
+
+class sravnenie_zoomOutButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_zoomOutButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.zoomOutButton_actionPerformed(e);
+  }
+}
+
+class sravnenie_rightButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_rightButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.rightButton_actionPerformed(e);
+  }
+}
+
+class sravnenie_upButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_upButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.upButton_actionPerformed(e);
+  }
+}
+
+class sravnenie_resultBox_itemAdapter implements java.awt.event.ItemListener {
+  sravnenie adaptee;
+
+  sravnenie_resultBox_itemAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void itemStateChanged(ItemEvent e) {
+    adaptee.resultBox_itemStateChanged(e);
+  }
+}
+
+class sravnenie_downButton_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+
+  sravnenie_downButton_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.downButton_actionPerformed(e);
+  }
+}
+class sravnenie_resultBox_actionAdapter implements java.awt.event.ActionListener {
+  sravnenie adaptee;
+  sravnenie_resultBox_actionAdapter(sravnenie adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.resultBox_actionPerformed(e);
+  }
+}
