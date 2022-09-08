@@ -111,7 +111,7 @@
 <div id="right-block">
     <form action="/newpass" autocomplete="on" method="POST">
         <p>Пора создать вам пароль!</p>
-        <div id="message" style="display: {{.display}}">{{.message}}</div>
+        <div id="message" style="display: {{if .message}} block {{else}} none {{end}}">{{.message}}</div>
         <label>
             <input name="pass1" type="password" id="pass1" oninput="checkFirst(this)"
                    readonly onfocus="this.removeAttribute('readonly')" placeholder="Введите пароль" required>

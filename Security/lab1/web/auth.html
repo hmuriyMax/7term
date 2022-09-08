@@ -19,9 +19,9 @@
 <body>
   <form action="/checklogin" autocomplete="on" method="POST">
       <h1>Логиньтесь!</h1>
-      <div id="message" style="display: {{.display}}">{{.message}}</div>
+      <div id="message" style="display: {{if .message}} block {{else}} none {{end}}">{{.message}}</div>
       <label>
-          <input name="login"
+          <input name="login" value="{{.username}}"
                  readonly onfocus="this.removeAttribute('readonly')" placeholder="Логин" required>
       </label>
       <label>

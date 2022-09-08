@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
+    <link rel="stylesheet" href="res/styles/style.css">
 </head>
 <body>
-    <h3>Привет, {{.username}}</h3>
-    <a href="./newpass">Сменить мой пароль</a>
-    <a href="./logout">Выход</a>
-    {{.Table}}
-    <a href="./adduser">Добавить пользователя</a>
+    <header>
+        <nav>
+            <a href="http://localhost:8080/newpass">Сменить мой пароль</a>
+            <a href="http://localhost:8080/logout">Выход</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Привет, {{.username}}</h1>
+        {{if .Table}}
+        <div id="usertable">
+            {{range .Table}}
+            <div class="row">
+                <span class="name">{{.Login}}</span>
+                <span class="is_blocked">{{.IsBlocked}}</span>
+                <input formaction="./changeBlock?user={{.Login}}" type="button" value="Изменить">
+                <span class="is_good">{{.IsGoodPass}}</span>
+                <input formaction="./changeRestr?user={{.Login}}" type="button" value="Изменить">
+            </div>
+            {{end}}
+        </div>
+        <a href="./adduser">Добавить пользователя</a>
+        {{end}}
+    </main>
 </body>
 </html>

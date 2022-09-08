@@ -9,13 +9,25 @@ import (
 	"os"
 )
 
+var users Database
+
+const usersPath = "./database"
+const tokensPath = "./tokens"
+
+var tokens Tokens
+
 func main() {
-	_, err := users.Open(filepath)
+	_, err := users.Open(usersPath)
 	if err != nil {
 		return
 	}
 	defer users.Close()
-	tokens.Start()
+
+	_, err = tokens.Open(tokensPath)
+	if err != nil {
+		return
+	}
+	defer tokens.Close()
 
 	port := "80"
 	if len(os.Args) > 1 {

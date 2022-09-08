@@ -87,7 +87,7 @@ func (db *Database) Close() {
 		log.Fatal(err)
 	}
 
-	marshal, err := json.Marshal(db.parsed)
+	marshal, err := json.MarshalIndent(db.parsed, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,4 +95,5 @@ func (db *Database) Close() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	db.filepath = ""
 }

@@ -3,10 +3,13 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 const HTMLpath = "./web/"
-const CookiesAge = 1000
+
+var Age, _ = time.ParseDuration("1d")
+var CookiesAge = Age.Seconds()
 
 type User struct {
 	Login       string
