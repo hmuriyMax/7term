@@ -68,10 +68,6 @@ func firstSignHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func adduserHandler(writer http.ResponseWriter, request *http.Request) {
-
-}
-
 func listUsersHandler(writer http.ResponseWriter, request *http.Request) {
 
 }

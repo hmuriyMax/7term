@@ -80,3 +80,7 @@ func newPassHandler(writer http.ResponseWriter, request *http.Request) {
 	usr.IsGoodPass = true
 	Redirect(writer, "/", http.StatusPermanentRedirect)
 }
+
+func adduserHandler(writer http.ResponseWriter, request *http.Request) {
+	//TODO: Допилить добавление пользователя
+}
