@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<Users>
-	<User>
-		<Name>Admin</Name>
-		<Pass>qwe</Pass>
-		<PassSecure>False</PassSecure>
-		<IsBlocked>False</IsBlocked>
-	</User>
-</Users>
