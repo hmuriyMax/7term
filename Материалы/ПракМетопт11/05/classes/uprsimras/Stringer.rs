@@ -1,2 +1,0 @@
-uprsimras.OwnListener
-uprsimras.Stringer
