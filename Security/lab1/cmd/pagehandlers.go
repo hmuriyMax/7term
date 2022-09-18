@@ -26,8 +26,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	data["username"] = user.Name
 
-	if r.URL.Query().Get("mess") == "exists" {
+	switch r.URL.Query().Get("mess") {
+	case "exists":
 		data["message"] = "Пользователь уже существует!"
+	case "empty":
+		data["message"] = "Нельзя создать пустого пользователя!"
 	}
 
 	defer func() { _ = pageTemplate.Execute(w, data) }()

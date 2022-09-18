@@ -44,8 +44,11 @@ func (t *Tokens) Parse() error {
 	}
 	err = json.Unmarshal(bytes, &t.list)
 	if err != nil {
-		log.Printf("Error unmarshalling file")
-		return err
+		_, err = os.Create(t.filepath)
+		if err != nil {
+			log.Printf("Error while creating db at %s...\n", t.filepath)
+			return err
+		}
 	}
 	return nil
 }

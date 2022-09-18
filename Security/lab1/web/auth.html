@@ -21,12 +21,12 @@
       <h1>Логиньтесь!</h1>
       <div id="message" style="display: {{if .message}} block {{else}} none {{end}}">{{.message}}</div>
       <label>
-          <input name="login" value="{{.username}}"
-                 readonly onfocus="this.removeAttribute('readonly')" placeholder="Логин" required>
+          <input name="login" value="{{.username}}" style="text-transform: lowercase"
+                 readonly onfocus="this.removeAttribute('readonly')" placeholder="логин" required>
       </label>
       <label>
           <input name="password" type="password"
-                 readonly onfocus="this.removeAttribute('readonly')" placeholder="Пароль" required>
+                 readonly onfocus="this.removeAttribute('readonly')" placeholder="пароль" required>
       </label>
     <input type="submit" id="submit" value="Войти">
   </form>

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 )
 
 func checkLogHandler(writer http.ResponseWriter, request *http.Request) {
@@ -14,19 +15,26 @@ func checkLogHandler(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
 	}
-	login := request.PostForm.Get("login")
+	login := strings.ToLower(request.PostForm.Get("login"))
 	password := request.PostForm.Get("password")
 
 	gotuser, err := users.GetUserByLogin(login)
-	if err != nil || gotuser.Pass != password {
+	if err != nil {
 		Redirect(writer, "/auth?mess=unauth&uname="+login, http.StatusSeeOther)
 		return
 	}
+	gotuser.NumOfTrys++
+	gotuser.IsBlocked = gotuser.IsBlocked || gotuser.NumOfTrys >= 3
 	if gotuser.IsBlocked {
 		Redirect(writer, "/auth?mess=blocked&uname="+login, http.StatusSeeOther)
 		return
 	}
+	if gotuser.Pass != password {
+		Redirect(writer, "/auth?mess=unauth&uname="+login, http.StatusSeeOther)
+		return
+	}
 
+	gotuser.NumOfTrys = 0
 	if _, err := request.Cookie("token"); err == nil {
 		DelCookie(writer, "token")
 	}
@@ -118,9 +126,12 @@ func adduserHandler(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
 	}
-	newuser := request.PostForm.Get("username")
+	newUser := strings.ToLower(request.PostForm.Get("username"))
 
-	_, err = users.GetUserByLogin(newuser)
+	if newUser == "" {
+		Redirect(writer, "/?mess=empty", http.StatusFound)
+	}
+	_, err = users.GetUserByLogin(newUser)
 	if err == nil {
 		Redirect(writer, "/?mess=exists", http.StatusFound)
 		return
@@ -130,7 +141,7 @@ func adduserHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	user := User{newuser, "", false, true, false}
+	user := User{newUser, "", false, true, false, 0}
 	err = users.Append(&user)
 	if err != nil {
 		return

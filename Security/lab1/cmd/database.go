@@ -14,6 +14,7 @@ type User struct {
 	IsBlocked   bool
 	PassRestr   bool
 	IsSuperuser bool
+	NumOfTrys   int
 }
 
 type Database struct {
@@ -33,7 +34,7 @@ func (db *Database) Open(filepath string) (bool, error) {
 			log.Printf("Error while creating db at %s...\n", db.filepath)
 			return false, err
 		}
-		db.parsed = append(db.parsed, &User{Login: "ADMIN", IsSuperuser: true, PassRestr: true})
+		db.parsed = append(db.parsed, &User{Login: "admin", IsSuperuser: true, PassRestr: true})
 		fl = true
 	} else {
 		err := db.Parse()

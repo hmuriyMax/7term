@@ -4,7 +4,12 @@ body{
     background-color: #F1EBFF;
     font-family: 'Roboto', Consolas, monospace;
     font-size: 1em;
+    background-image: url("/res/img/bg3.jpg");
     background-size: cover;
+}
+
+header, main, footer, form{
+    z-index: 2;
 }
 
 h1{
@@ -38,11 +43,8 @@ nav > * {
     margin: 1em;
 }
 
-main{
-    margin-top: 80px;
-}
-
 #usertable{
+    background-color: #F1EBFF;
     margin: 0 auto;
     width: 50%;
     min-width: 50%;
@@ -79,4 +81,15 @@ main{
     border-radius: 2px;
     padding: 5px;
     font-weight: bold;
+}
+
+main{
+    background-color: #0005;
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }

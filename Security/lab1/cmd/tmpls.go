@@ -12,14 +12,6 @@ var Age, _ = time.ParseDuration("1d")
 var CookiesAge = Age.Seconds()
 
 func Redirect(w http.ResponseWriter, url string, status int) {
-	//duration, err := time.ParseDuration("5s")
-	//if err != nil {
-	//	log.Println(err)
-	//}
-	//
-	//ctx, canselfunc := context.WithTimeout(context.Background(), duration)
-	//defer canselfunc()
-
 	req, err := http.NewRequest("GET", url, http.NoBody)
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +24,6 @@ func SetCookie(w http.ResponseWriter, name, value string, MaxAge int) {
 		Name:   name,
 		Value:  value,
 		MaxAge: MaxAge,
-		Domain: "/",
 	}
 	http.SetCookie(w, &tmp)
 }

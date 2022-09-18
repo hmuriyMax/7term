@@ -36,7 +36,7 @@ func main() {
 	router := mux.NewRouter()
 	server := http.Server{Handler: router}
 	ctx, canselfunc := context.WithCancel(context.Background())
-	defer func() { _ = server.Shutdown(ctx) }()
+	defer func() { _ = server.Shutdown(ctx); canselfunc() }()
 	router.StrictSlash(false)
 	fileServer := http.FileServer(http.Dir("./web/res"))
 	router.PathPrefix("/res").Handler(http.StripPrefix("/res/", fileServer))
@@ -64,5 +64,4 @@ func main() {
 			break
 		}
 	}
-	canselfunc()
 }
