@@ -50,13 +50,14 @@ func main() {
 	router.HandleFunc("/changeblock", changeBlockHandler)
 	router.HandleFunc("/changerestr", changeRestrHandler)
 	router.HandleFunc("/logout", logoutHandler)
-	log.Printf("HTTP-server started! http://localhost:%s", port)
+	log.Printf("HTTP-server started! http://localhost:%s\n", port)
 	go func() {
 		err = http.ListenAndServe(":"+port, router)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}()
+	fmt.Println("To stop server enter \"stop\" command")
 	var command string
 	for {
 		_, err := fmt.Fscanln(os.Stdin, &command)

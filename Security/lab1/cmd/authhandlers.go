@@ -18,23 +18,25 @@ func checkLogHandler(writer http.ResponseWriter, request *http.Request) {
 	login := strings.ToLower(request.PostForm.Get("login"))
 	password := request.PostForm.Get("password")
 
-	gotuser, err := users.GetUserByLogin(login)
+	gotUser, err := users.GetUserByLogin(login)
 	if err != nil {
 		Redirect(writer, "/auth?mess=unauth&uname="+login, http.StatusSeeOther)
 		return
 	}
-	gotuser.NumOfTrys++
-	gotuser.IsBlocked = gotuser.IsBlocked || gotuser.NumOfTrys >= 3
-	if gotuser.IsBlocked {
+	gotUser.NumOfTrys++
+	gotUser.IsBlocked = gotUser.IsBlocked || gotUser.NumOfTrys >= 3
+	if gotUser.IsBlocked {
 		Redirect(writer, "/auth?mess=blocked&uname="+login, http.StatusSeeOther)
 		return
 	}
-	if gotuser.Pass != password {
+
+	// Проверка на равенство сохраненного хеша и хеша полученного пароля
+	if gotUser.Pass != Hash27(password) {
 		Redirect(writer, "/auth?mess=unauth&uname="+login, http.StatusSeeOther)
 		return
 	}
 
-	gotuser.NumOfTrys = 0
+	gotUser.NumOfTrys = 0
 	if _, err := request.Cookie("token"); err == nil {
 		DelCookie(writer, "token")
 	}
@@ -91,19 +93,16 @@ func newPassHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	if usr.PassRestr && pass1 == Reverse(usr.Login) || len(pass1) < 4 {
+	if usr.PassRestr && pass1 == Reverse(usr.Login) || len(pass1) < 4 || len(pass1) > 20 {
 		Redirect(writer, request.Referer()+"?mess=incorr", http.StatusTemporaryRedirect)
 		return
 	}
-
-	if opass != usr.Pass {
+	if Hash27(opass) != usr.Pass {
 		Redirect(writer, request.Referer()+"?mess=opass", http.StatusTemporaryRedirect)
 		return
 	}
-
-	usr.Pass = pass1
-	usr.IsBlocked = false
-	usr.PassRestr = true
+	// Сохранение хеша пароля
+	usr.Pass = Hash27(pass1)
 	Redirect(writer, "/", http.StatusFound)
 }
 
@@ -153,16 +152,14 @@ func changeRestrHandler(writer http.ResponseWriter, request *http.Request) {
 	token, err := request.Cookie("token")
 	if err != nil {
 		http.Error(writer, "User token not found", http.StatusInternalServerError)
-		return
 	}
 	tkn, err := tokens.Get(token.Value)
 	if err != nil {
-		return
+		http.Error(writer, "Not found in token table", http.StatusInternalServerError)
 	}
 
 	if !tkn.Su {
 		http.Error(writer, "Not superuser!", http.StatusUnauthorized)
-		return
 	}
 
 	username := request.URL.Query().Get("user")
@@ -181,16 +178,14 @@ func changeBlockHandler(writer http.ResponseWriter, request *http.Request) {
 	token, err := request.Cookie("token")
 	if err != nil {
 		http.Error(writer, "User token not found", http.StatusInternalServerError)
-		return
 	}
 	tkn, err := tokens.Get(token.Value)
 	if err != nil {
-		return
+		http.Error(writer, "Not found in token table", http.StatusInternalServerError)
 	}
 
 	if !tkn.Su {
 		http.Error(writer, "Not superuser!", http.StatusUnauthorized)
-		return
 	}
 
 	username := request.URL.Query().Get("user")

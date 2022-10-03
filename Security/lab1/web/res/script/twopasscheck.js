@@ -3,7 +3,7 @@ let a, b, c = false;
 function checkFirst(el, fl, username){
     let p2 = document.getElementById("pass2");
     username = [...username].reverse().join("")
-    if (el.value.length < 4 || el.value === username && fl) {
+    if (el.value.length < 4 || el.value === username && fl || el.value.length > 20) {
         el.style.borderBottomColor = "#934B4B";
         a = false
     } else {
@@ -27,7 +27,7 @@ function checkSecond(el){
 }
 
 function checkOld(el){
-    if (el.value.length < 4) {
+    if (el.value.length < 4 || el.value.length > 20) {
         el.style.borderBottomColor = "#934B4B";
         c = false
     } else {

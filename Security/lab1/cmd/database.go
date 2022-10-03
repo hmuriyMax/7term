@@ -22,6 +22,16 @@ type Database struct {
 	parsed   []*User
 }
 
+func (db *Database) Create() error {
+	_, err := os.Create(db.filepath)
+	if err != nil {
+		log.Printf("Error while creating db at %s...\n", db.filepath)
+		return err
+	}
+	db.parsed = append(db.parsed, &User{Login: "admin", IsSuperuser: true, PassRestr: true})
+	return nil
+}
+
 func (db *Database) Open(filepath string) (bool, error) {
 	fl := false
 	db.filepath = filepath
@@ -29,12 +39,10 @@ func (db *Database) Open(filepath string) (bool, error) {
 	defer func() { _ = file.Close() }()
 	if err != nil {
 		log.Printf("Database not found at %s\nTrying to create one...\n", db.filepath)
-		file, err = os.Create(db.filepath)
+		err := db.Create()
 		if err != nil {
-			log.Printf("Error while creating db at %s...\n", db.filepath)
 			return false, err
 		}
-		db.parsed = append(db.parsed, &User{Login: "admin", IsSuperuser: true, PassRestr: true})
 		fl = true
 	} else {
 		err := db.Parse()
@@ -55,8 +63,10 @@ func (db *Database) Parse() error {
 	}
 	err = json.Unmarshal(bytes, &db.parsed)
 	if err != nil {
-		log.Printf("Error unmarshalling file")
-		return err
+		err := db.Create()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

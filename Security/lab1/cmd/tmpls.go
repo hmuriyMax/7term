@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -42,4 +43,17 @@ func Reverse(s string) string {
 		runes[i], runes[j] = runes[j], runes[i]
 	}
 	return string(runes)
+}
+
+// Hash27 Функция хеширования из 27 варианта
+func Hash27(s string) string {
+	var hash uint64
+	if s == "" {
+		return s
+	}
+	for i, ch := range s {
+		hash += uint64(ch * int32(i))
+		hash %= 256
+	}
+	return fmt.Sprint(hash)
 }
