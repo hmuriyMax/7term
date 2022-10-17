@@ -1,9 +1,14 @@
 package main
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/md5"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -18,12 +23,19 @@ type User struct {
 }
 
 type Database struct {
-	filepath string
-	parsed   []*User
+	logged         bool
+	masterPassword string
+	filepath       string
+	parsed         []*User
 }
 
 func (db *Database) Create() error {
 	_, err := os.Create(db.filepath)
+	if db.masterPassword == "" {
+		_, _ = fmt.Print("Come up with master password: ")
+		_, _ = fmt.Scanln(&db.masterPassword)
+		db.logged = true
+	}
 	if err != nil {
 		log.Printf("Error while creating db at %s...\n", db.filepath)
 		return err
@@ -58,16 +70,20 @@ func (db *Database) Parse() error {
 		return fmt.Errorf("Database was never opened\n")
 	}
 	bytes, err := os.ReadFile(db.filepath)
+
+	// Security part
+	fmt.Printf("Enter master password: ")
+	_, _ = fmt.Scanln(&db.masterPassword)
+	bytes, err = Decrypt(bytes, md5.Sum([]byte(db.masterPassword)))
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(bytes, &db.parsed)
+
+	err = json.Unmarshal(bytes[:len(bytes)-16], &db.parsed)
 	if err != nil {
-		err := db.Create()
-		if err != nil {
-			return err
-		}
+		return errors.New("wrong password entered or failed to parse database: " + err.Error())
 	}
+	log.Println("file unmarshalled successfully")
 	return nil
 }
 
@@ -110,9 +126,53 @@ func (db *Database) Close() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = fmt.Fprint(file, string(marshal))
+
+	// Security part
+	bytes, err := Encrypt(marshal, md5.Sum([]byte(db.masterPassword)))
+	if err != nil {
+		log.Printf("Failed to encrypt: %s. Saving unencrypted version for backup", err)
+		bytes = marshal
+	}
+
+	_, err = fmt.Fprint(file, string(bytes))
 	if err != nil {
 		log.Fatal(err)
 	}
 	db.filepath = ""
+}
+
+func Encrypt(plaintext []byte, passwordHash [16]byte) ([]byte, error) {
+	//key := md5.Sum(password)
+	//log.Printf("key: %s\n", key)
+	block, err := aes.NewCipher(passwordHash[:])
+	if err != nil {
+		return nil, err
+	}
+
+	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
+
+	return ciphertext, nil
+}
+
+func Decrypt(tCipher []byte, passwordHash [16]byte) ([]byte, error) {
+	//key := md5.Sum(password)
+	//log.Printf("key: %s\n", key)
+	block, err := aes.NewCipher(passwordHash[:])
+	if err != nil {
+		return nil, err
+	}
+
+	iv := tCipher[:aes.BlockSize]
+
+	plaintext2 := make([]byte, len(tCipher))
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(plaintext2, tCipher[aes.BlockSize:])
+	return plaintext2, nil
 }

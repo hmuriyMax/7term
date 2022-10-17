@@ -19,7 +19,7 @@ var tokens Tokens
 func main() {
 	_, err := users.Open(usersPath)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 	defer users.Close()
 
