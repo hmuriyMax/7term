@@ -4,7 +4,7 @@
 create table branch
 (
     branch_id  integer      not null,
-    manager_id integer      not null,
+    manager_id integer,
     name       varchar(128) not null,
     constraint branch_pk
         primary key (branch_id),

@@ -4,7 +4,7 @@
 create table device
 (
     device_id     integer      not null,
-    department_id integer      not null,
+    department_id integer,
     name          varchar(128) not null,
     constraint device_pk
         primary key (device_id),
