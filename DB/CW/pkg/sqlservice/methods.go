@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	sql_json "github.com/elgs/gosqljson"
+	"strings"
 )
 
 type Row = []string
@@ -53,6 +54,31 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 		Data:    data}, nil
 }
 
-func (s *SQLService) Insert(tableName string, rows []any) error {
+func (s *SQLService) parse(in string) (out string) {
+	out = strings.Trim(in, "[]")
+	tmp := strings.Fields(out)
+	out = strings.Join(tmp, ", ")
+	return
+}
+
+func (s *SQLService) Insert(ctx context.Context, rows Table) error {
+	rowStr := strings.Join(rows.Columns, ", ")
+	var tmp Row
+	for i, el := range rows.Data[0] {
+		if !strings.HasSuffix(rows.Columns[i], "id") {
+			tmp = append(tmp, fmt.Sprintf("'%s'", el))
+		} else {
+			if el == "" {
+				el = "0"
+			}
+			tmp = append(tmp, el)
+		}
+	}
+	valStr := strings.Join(tmp, ", ")
+	query := fmt.Sprintf("insert into %s (%v) values (%v)", rows.Name, rowStr, valStr)
+	_, err := s.db.ExecContext(ctx, query)
+	if err != nil {
+		return err
+	}
 	return nil
 }
