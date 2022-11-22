@@ -9,22 +9,23 @@ import (
 )
 
 func main() {
-	serviceCtx, cancelFunc := context.WithCancel(context.Background())
-	defer cancelFunc()
-
 	sqlSvc := sqlservice.NewSQLService("postgres", "postgrespw",
 		"localhost", "55000", "course_work")
-	sqlContext, cancelSql := context.WithTimeout(serviceCtx, time.Second)
+	sqlContext, cancelSql := context.WithTimeout(context.Background(), time.Second)
 	defer cancelSql()
-	err := sqlSvc.Connect(sqlContext)
+	err := sqlSvc.Start(sqlContext)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	httpSvc := httpservice.NewHTTPService(80, "http://localhost")
-	err = httpSvc.Start(serviceCtx)
-	if err != nil {
-		log.Fatal(err)
-	}
+	httpSvc := httpservice.NewHTTPService(8080, "localhost")
+	httpSvc.ConnectToDataBase(sqlSvc)
+	httpSvc.Start()
 
+	select {
+	case err := <-httpSvc.GetErrChan():
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }

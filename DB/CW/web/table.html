@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" href="/res/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {{range .tableList}}
+                <li>
+                    <a href="/{{.}}">{{.}}</a>
+                </li>
+                {{end}}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {{if .Table}}
+        <div>Таблица: <span class="mono">{{.Table.Name}}</span></div>
+            <table class="mono">
+                <tr>
+                    {{range .Table.Columns}}
+                    <td>{{.}}</td>
+                    {{end}}
+                    <td></td>
+                </tr>
+                {{range .Table.Data}}
+                <tr>
+                    {{range .}}
+                        <td>{{.}}</td>
+                    {{end}}
+                    <td>
+                        <input type="hidden" name="key" value="{{.}}" form="del">
+                        <input type="submit" value="×" style="color: white;" form="del" alt="Удалить">
+                    <tr>
+                {{end}}
+                <tr>
+                    {{range .Table.Columns}}
+                    <td><label>
+                        <input type="text" form="ins" name="{{.}}" placeholder="Введите {{.}}">
+                    </label></td>
+                    {{end}}
+                    <td><input type="submit" value="+" form="ins" alt="Добавить"></td>
+                </tr>
+            </table>
+            <form action="/insert/{{.Table.Name}}" method="get" id="ins">
+                <input type="hidden" name="cols" value="{{.Table.Columns}}">
+            </form>
+            <form action="/delete/{{.Table.Name}}" method="get" id="del">
+                <input type="hidden" name="cols" value="{{.Table.Columns}}">
+            </form>
+        {{else}}
+            <div id="errMain">{{.Error}}</div>
+            <div id="subError" class="mono">{{.SubError}}</div>
+        {{end}}
+    </main>
+</body>
+</html>

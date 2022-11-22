@@ -2,43 +2,49 @@ package sqlservice
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 type SQLService struct {
-	Username string
-	Password string
-	Host     string
-	Port     string
-	DbName   string
-	db       *sql.DB
+	username string
+	password string
+	host     string
+	port     string
+	dbName   string
+	db       *sqlx.DB
 }
 
 func NewSQLService(username, password, host, port, dbName string) *SQLService {
 	return &SQLService{
-		Username: username,
-		Password: password,
-		Host:     host,
-		Port:     port,
-		DbName:   dbName,
+		username: username,
+		password: password,
+		host:     host,
+		port:     port,
+		dbName:   dbName,
 	}
 }
 
-func (s *SQLService) Connect(ctx context.Context) (err error) {
+func (s *SQLService) Start(ctx context.Context) error {
+	err := s.connect(ctx)
+	if err != nil {
+		return fmt.Errorf("start connection: %v", err)
+	}
+	return nil
+}
+
+func (s *SQLService) connect(ctx context.Context) (err error) {
 	connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s database=%s sslmode=disable",
-		s.Username, s.Password, s.Host, s.Port, s.DbName)
-	s.db, err = sql.Open("postgres", connStr)
+		s.username, s.password, s.host, s.port, s.dbName)
+	s.db, err = sqlx.Open("postgres", connStr)
 	if err != nil {
 		return fmt.Errorf("open SQL connection: %v", err)
 	}
 
 	err = s.db.PingContext(ctx)
 	if err != nil {
-		return fmt.Errorf("ping database: %v", err)
+		return fmt.Errorf("ping: %v", err)
 	}
-
-	s.db.Query("tabl")
 	return nil
 }

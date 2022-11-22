@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/res/css/style.css">
+</head>
+<body>
+    <main>
+        <ul>
+            {{range .tableList}}
+            <li><a href="/table/{{.}}">{{.}}</a></li>
+            {{end}}
+        </ul>
+    </main>
+</body>
+</html>
