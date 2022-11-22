@@ -54,22 +54,34 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 		}
 	}()
 
+	tableList, err := s.db.GetTableList(request.Context())
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data["tableList"] = tableList
+
 	if tableName != "" {
 		ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Second)
 		defer cancelFunc()
 
 		table, err := s.db.SelectAll(ctx, tableName)
 		if err != nil {
-			data["Error"] = fmt.Sprintf("Не удалось открыть %s:", tableName)
+			data["Error"] = template.HTML(
+				fmt.Sprintf("Не удалось открыть <span class=\"mono\">%s</span>:", tableName))
 			data["SubError"] = err.Error()
 			return
 		}
 		if len(table.Data) > 0 {
 			data["Table"] = *table
 		} else {
-			data["Error"] = fmt.Sprintf("В таблице %s нет данных...", tableName)
+			data["Error"] = template.HTML(
+				fmt.Sprintf("В таблице <span class=\"mono\">%s</span> нет данных...",
+					tableName))
 			return
 		}
+		inErr := request.FormValue("inError")
+		data["inError"] = inErr
 		return
 	}
 	data["Error"] = "Таблица не выбрана"

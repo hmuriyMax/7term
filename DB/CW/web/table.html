@@ -7,16 +7,14 @@
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
+            <ul class="mono">
                 <li><a href="/">Home</a></li>
                 {{range .tableList}}
                 <li>
-                    <a href="/{{.}}">{{.}}</a>
+                    <a href="/table/{{.}}">{{.}}</a>
                 </li>
                 {{end}}
             </ul>
-        </nav>
     </header>
     <main>
         {{if .Table}}
@@ -53,6 +51,9 @@
             <form action="/delete/{{.Table.Name}}" method="get" id="del">
                 <input type="hidden" name="cols" value="{{.Table.Columns}}">
             </form>
+        {{if .inError}}
+            <div id="inlineErr">{{.inError}}</div>
+        {{end}}
         {{else}}
             <div id="errMain">{{.Error}}</div>
             <div id="subError" class="mono">{{.SubError}}</div>
