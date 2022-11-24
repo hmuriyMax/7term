@@ -3,10 +3,12 @@ package httpservice
 import (
 	"CW/pkg/sqlservice"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -18,6 +20,8 @@ func (s *HTTPService) addHandlers() {
 	s.mux.HandleFunc("/", s.indexHandler)
 	s.mux.HandleFunc("/table/{tableName}", s.tableHandler)
 	s.mux.HandleFunc("/insert/{tableName}", s.insertHandler)
+	//s.mux.HandleFunc("/update/{tableName}", s.updateHandler)
+	s.mux.HandleFunc("/delete/{tableName}", s.deleteHandler)
 }
 
 func (s *HTTPService) indexHandler(writer http.ResponseWriter, request *http.Request) {
@@ -74,14 +78,14 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 			data["SubError"] = err.Error()
 			return
 		}
-		//if len(table.Data) > 0 {
-		data["Table"] = *table
-		//} else {
-		//	data["Error"] = template.HTML(
-		//		fmt.Sprintf("В таблице <span class=\"mono\">%s</span> нет данных...",
-		//			tableName))
-		//	return
-		//}
+		if len(table.Data) > 0 {
+			data["Table"] = *table
+		} else {
+			data["Error"] = template.HTML(
+				fmt.Sprintf("В таблице <span class=\"mono\">%s</span> нет данных.",
+					tableName))
+			return
+		}
 		inErr := request.FormValue("inError")
 		data["inError"] = inErr
 		return
@@ -98,11 +102,46 @@ func (s *HTTPService) insertHandler(writer http.ResponseWriter, request *http.Re
 	data.Name = tableName
 	data.Data = make([][]string, 1)
 	for key, val := range request.URL.Query() {
-		data.Columns = append(data.Columns, key)
+		var col sqlservice.Column
+		err := json.Unmarshal([]byte(key), &col)
+		if err != nil {
+			url := fmt.Sprintf("/table/%s?inError=%s", tableName, err.Error())
+			http.Redirect(writer, request, url, http.StatusFound)
+			return
+		}
+		data.Columns = append(data.Columns, col)
 		data.Data[0] = append(data.Data[0], val[0])
 	}
 	err := s.db.Insert(ctx, data)
 	if err != nil {
+		url := fmt.Sprintf("/table/%s?inError=%s", tableName, err.Error())
+		http.Redirect(writer, request, url, http.StatusFound)
+		return
+	}
+	http.Redirect(writer, request, "/table/"+tableName, http.StatusFound)
+}
+
+func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Request) {
+	ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	defer cancelFunc()
+	tableName := mux.Vars(request)["tableName"]
+
+	var data sqlservice.Table
+	data.Name = tableName
+	data.Data = make([][]string, 1)
+	row := strings.Split(strings.Trim(request.URL.Query().Get("row"), "[] "), " ")
+	cols := strings.Split(request.URL.Query().Get("cols"), ", ")
+
+	data.Columns = make([]sqlservice.Column, len(cols))
+	for i, col := range cols {
+		data.Columns[i] = sqlservice.Column{
+			Name: col,
+		}
+	}
+	data.Data[0] = row
+	err := s.db.Delete(ctx, data)
+	if err != nil {
+		s.logger.Println(err)
 		url := fmt.Sprintf("/table/%s?inError=%s", tableName, err.Error())
 		http.Redirect(writer, request, url, http.StatusFound)
 		return

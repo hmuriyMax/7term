@@ -19,10 +19,12 @@
     <main>
         {{if .Table}}
         <div>Таблица: <span class="mono">{{.Table.Name}}</span></div>
+        {{$tablename := .Table.Name}}
+        {{$tablecols := .Table.Columns}}
             <table class="mono">
                 <tr>
                     {{range .Table.Columns}}
-                    <td>{{.}}</td>
+                    <td>{{.Name}}</td>
                     {{end}}
                     <td></td>
                 </tr>
@@ -32,25 +34,28 @@
                         <td>{{.}}</td>
                     {{end}}
                     <td>
-                        <input type="hidden" name="key" value="{{.}}" form="del">
-                        <input type="submit" value="×" style="color: white;" form="del" alt="Удалить">
+                        <form action="/delete/{{$tablename}}" method="get">
+                            <input type="hidden" name="row" value="{{.}}">
+                            <input type="hidden" name="cols" value="{{$tablecols}}">
+                            <input type="submit" value="×" style="color: white;" alt="Удалить">
+                        </form>
                     <tr>
                 {{end}}
                 <tr>
                     {{range .Table.Columns}}
                     <td><label>
-                        <input type="text" form="ins" name="{{.}}" placeholder="Введите {{.}}">
+                        <input type="text" form="ins"
+                               name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
+                               placeholder="Введите {{.Name}}">
                     </label></td>
                     {{end}}
-                    <td><input type="submit" value="+" form="ins" alt="Добавить"></td>
+                    <td>
+                        <form action="/insert/{{$tablename}}" method="get" id="ins">
+                            <input type="submit" value="+" alt="Добавить">
+                        </form>
+                    </td>
                 </tr>
             </table>
-            <form action="/insert/{{.Table.Name}}" method="get" id="ins">
-<!--                <input type="hidden" name="cols" value="{{.Table.Columns}}">-->
-            </form>
-            <form action="/delete/{{.Table.Name}}" method="get" id="del">
-                <input type="hidden" name="cols" value="{{.Table.Columns}}">
-            </form>
         {{if .inError}}
             <div id="inlineErr">{{.inError}}</div>
         {{end}}

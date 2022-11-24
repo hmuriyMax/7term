@@ -1,5 +1,6 @@
 body{
     font-family: Roboto, sans-serif;
+    background-color: #EEE;
 }
 a{
     color: inherit;
@@ -7,17 +8,20 @@ a{
 }
 table{
     border-spacing: 0;
-    border: 1px solid #000;
+    border: 1px solid #333;
     margin: 20px auto;
     border-radius: 5px;
+    background-color: #f0f0f0;
 }
 tr:first-child{
     font-weight: bold;
+    background-color: #333;
+    color: #fff;
 }
 
 td{
-    border-left: 1px solid #000;
-    border-bottom: 1px solid #000;
+    border-left: 1px solid #333;
+    border-bottom: 1px solid #333;
     padding: 0.5vh 10px;
 }
 
@@ -39,7 +43,7 @@ tr:last-child > td:last-child {
 main{
     max-width:600px;
     margin: 3em auto;
-    background-color: #EEE;
+    background-color: #fff;
     padding: 20px;
     min-height: 600px;
     border-radius: 7px;
