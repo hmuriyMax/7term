@@ -12,7 +12,10 @@ table{
     margin: 20px auto;
     border-radius: 5px;
     background-color: #f0f0f0;
+    width: min-content;
+    white-space: nowrap;
 }
+
 tr:first-child{
     font-weight: bold;
     background-color: #333;
@@ -25,15 +28,20 @@ td{
     padding: 0.5vh 10px;
 }
 
-tr > td:last-child{
+tr > td:last-child, tr:not(:last-child) > td:nth-last-child(2){
     padding: 0;
-    width: 3vh;
-    height: 3vh;
+    min-width: 3vh;
+    min-height: 3vh;
     font-weight: bold;
 }
 
 tr:not(:first-child):not(:last-child) > td:last-child{
     background-color: #e39393;
+}
+
+tr:not(:first-child):not(:last-child) > td:nth-last-child(2){
+    color: #fff;
+    background-color: #42275b;
 }
 
 tr:last-child{

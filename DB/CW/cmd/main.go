@@ -18,7 +18,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	httpSvc := httpservice.NewHTTPService(80, "localhost")
+	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1")
 	httpSvc.ConnectToDataBase(sqlSvc)
 	httpSvc.Start()
 

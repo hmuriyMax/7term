@@ -49,7 +49,7 @@
                         {{else if eq $thisID $editingID}}
                         <td><label>
                             {{$column := index $tablecols $index}}
-                            <input form="upd" placeholder="Новое значение:"
+                            <input form="upd" placeholder="Новое значение:" type="{{if eq $column.Type "timestamp without time zone"}}datetime-local{{else}} text{{end}}"
                                    value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
                         </label></td>
                         {{else}}
@@ -83,7 +83,7 @@
                 <tr>
                     {{range .Table.Columns.Values}}
                     <td><label>
-                        <input type="{{if eq .Type "timestamp without time zone"}}datetime{{else}} text{{end}}" form="ins"
+                        <input type="{{if eq .Type "timestamp without time zone"}}datetime-local{{else}} text{{end}}" form="ins"
                                name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
                                placeholder="Введите {{.Name}}"
                                {{if eq .Name $idCol}}

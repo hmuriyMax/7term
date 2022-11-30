@@ -4,8 +4,9 @@ import (
 	"CW/pkg/sqlservice/entities"
 	"context"
 	"fmt"
-	sql_json "github.com/elgs/gosqljson"
-	"strconv"
+	sqr "github.com/Masterminds/squirrel"
+
+	"sort"
 	"strings"
 )
 
@@ -16,6 +17,13 @@ const (
 	SelectUndoneRequests
 	SelectOverdueRequests
 	GetRequestNumber
+)
+
+type SortFlag int8
+
+const (
+	SortByID SortFlag = 1
+	SortNone SortFlag = 2
 )
 
 type Column struct {
@@ -69,47 +77,14 @@ func (s *SQLService) GetTableList(ctx context.Context) (tableList Row, err error
 }
 
 func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, error) {
-	var (
-		cols Header
-		data []Row
-	)
-
-	query := fmt.Sprintf("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '%s';", tableName)
-	err := s.db.SelectContext(ctx, &cols.Values, query)
+	query := sqr.Select("*").From(tableName)
+	query = query.RunWith(s.db)
+	tbl, err := s.selectByQuery(ctx, &query, SortByID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("selectAll: %v", err)
 	}
-	cols.IDColumn = cols.Values[0].Name
-
-	query = fmt.Sprintf("select * from %s order by %s", tableName, cols.IDColumn)
-	mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
-	if err != nil {
-		return nil, fmt.Errorf("select all: %v", err)
-	}
-
-	data = make([]Row, len(mapString))
-	for i, row := range mapString {
-		dataRow := make(Row, len(cols.Values))
-		for key, val := range row {
-			index, ok := cols.getIndex(key)
-			if ok {
-				dataRow[index] = val
-			}
-		}
-		data[i] = dataRow
-	}
-	var lastID int
-	if len(data) > 0 {
-		lastID, _ = strconv.Atoi(data[len(data)-1][0])
-	} else {
-		lastID = 0
-	}
-	return &Table{
-		Name:    tableName,
-		Columns: cols,
-		Data:    data,
-		NextID:  lastID + 1,
-	}, nil
+	tbl.Name = tableName
+	return tbl, nil
 }
 
 func (s *SQLService) parse(in string) (out string) {
@@ -122,16 +97,14 @@ func (s *SQLService) parse(in string) (out string) {
 func (s *SQLService) Insert(ctx context.Context, rows Table) error {
 	rowStr := rows.Columns.String()
 	for _, row := range rows.Data {
-		var tmp Row
+		var tmp []string
 		for i, el := range row {
-			if rows.Columns.Values[i].Type == "integer" {
-				if el == "" {
-					el = "0"
-				}
-				tmp = append(tmp, el)
-			} else {
-				tmp = append(tmp, fmt.Sprintf("'%s'", el))
+			if el == "" {
+				el = "NULL"
+			} else if rows.Columns.Values[i].Type != "integer" {
+				el = fmt.Sprintf("'%s'", el)
 			}
+			tmp = append(tmp, fmt.Sprint(el))
 		}
 		valStr := strings.Join(tmp, ", ")
 		query := fmt.Sprintf("insert into %s (%v) values (%v)", rows.Name, rowStr, valStr)
@@ -161,7 +134,9 @@ func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
 	for i, el := range data.Data[0] {
 		if data.Columns.Values[i].Name != data.Columns.IDColumn {
 			var formatStr string
-			if data.Columns.Values[i].Type == "integer" {
+			if el == "" {
+				formatStr += "%s=NULL, "
+			} else if data.Columns.Values[i].Type == "integer" {
 				formatStr += "%s=%s, "
 			} else {
 				formatStr = "%s='%s', "
@@ -177,15 +152,66 @@ func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
 	return nil
 }
 
-func (s *SQLService) Select(ctx context.Context, reqtype int, params ...any) (data Table, err error) {
-	switch reqtype {
-	case SelectRequestByWorker:
-		query := "select * from repair_request inner join performer using(worker_id) group by worker_id"
-		mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
-		if err != nil {
-			return data, err
-		}
-		mapString = mapString
+func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder, sortFlag SortFlag) (*Table, error) {
+	var data Table
+
+	rows, err := query.QueryContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("select by query: %v", err)
 	}
-	return data, nil
+
+	columns, _ := rows.ColumnTypes()
+	if len(columns) == 0 {
+		return nil, fmt.Errorf("error parsing columns")
+	}
+
+	for _, col := range columns {
+		data.Columns.Values = append(data.Columns.Values, Column{
+			Name: col.Name(),
+			Type: strings.ToLower(col.DatabaseTypeName()),
+		})
+	}
+	data.Columns.IDColumn = columns[0].Name()
+
+	for rows.Next() {
+		var strRow Row
+
+		anyRow := make([][]byte, len(columns))
+		anyRowPointers := make([]any, len(columns))
+		for i := range anyRow {
+			anyRowPointers[i] = &anyRow[i]
+		}
+		err = rows.Scan(anyRowPointers...)
+		for i, el := range anyRow {
+			strEl := string(el)
+			if strings.Contains(data.Columns.Values[i].Type, "time") {
+				rpl := strings.NewReplacer("T", " ", "Z", "")
+				strEl = rpl.Replace(strEl)
+			}
+			strRow = append(strRow, strEl)
+		}
+		data.Data = append(data.Data, strRow)
+	}
+	switch sortFlag {
+	case SortByID:
+		sort.Slice(data.Data, func(i, j int) bool {
+			return data.Data[i][0] < data.Data[j][0]
+		})
+	default:
+		break
+	}
+	data.NextID = len(data.Data) + 1
+	return &data, nil
 }
+
+//switch reqtype {
+//case SelectRequestByWorker:
+//query := `select performer.name, request_id, (finish_stamp is null) as "Выполнено"
+//					from repair_request
+//						inner join performer
+//							using(worker_id)
+//					order by performer.name, request_id;`
+//mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
+//if err != nil {
+//return Table{}, err
+//}
