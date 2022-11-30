@@ -83,7 +83,7 @@
                 <tr>
                     {{range .Table.Columns.Values}}
                     <td><label>
-                        <input type="text" form="ins"
+                        <input type="{{if eq .Type "timestamp without time zone"}}datetime{{else}} text{{end}}" form="ins"
                                name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
                                placeholder="Введите {{.Name}}"
                                {{if eq .Name $idCol}}
@@ -101,7 +101,7 @@
             <div id="inlineErr">{{.inError}}</div>
         {{end}}
         {{if .showID}}
-        <a class="mono" href="/table/{{$tablename}}">Скрыть ID</a>
+        <a class="mono" href="/table/{{$tablename}}?showid=0">Скрыть ID</a>
         {{else}}
         <a class="mono" href="/table/{{$tablename}}?showid=1">Показать ID</a>
         {{end}}

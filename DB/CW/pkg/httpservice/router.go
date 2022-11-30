@@ -22,6 +22,7 @@ func (s *HTTPService) addHandlers() {
 	s.mux.HandleFunc("/insert/{tableName}", s.insertHandler)
 	s.mux.HandleFunc("/update/{tableName}", s.updateHandler)
 	s.mux.HandleFunc("/delete/{tableName}", s.deleteHandler)
+	s.mux.HandleFunc("/select/{tableName}", s.selectHandler)
 }
 
 func (s *HTTPService) indexHandler(writer http.ResponseWriter, request *http.Request) {
@@ -52,6 +53,24 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 	pageTemplate := template.Must(template.ParseFiles(indexPath))
 	tableName := mux.Vars(request)["tableName"]
 
+	if request.FormValue("showid") == "1" {
+		http.SetCookie(writer, &http.Cookie{
+			Name:   "showid",
+			Value:  request.FormValue("showid"),
+			MaxAge: int(10 * time.Hour.Seconds()),
+		})
+		http.Redirect(writer, request, request.URL.Path, http.StatusFound)
+		return
+	}
+	if request.FormValue("showid") == "0" {
+		http.SetCookie(writer, &http.Cookie{
+			Name:   "showid",
+			Value:  request.FormValue("showid"),
+			MaxAge: -1,
+		})
+		http.Redirect(writer, request, request.URL.Path, http.StatusFound)
+		return
+	}
 	data := make(map[string]interface{})
 	defer func() {
 		err := pageTemplate.Execute(writer, data)
@@ -81,12 +100,14 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 		data["Table"] = *table
 		inErr := request.FormValue("inError")
 		data["inError"] = inErr
-		data["showID"] = request.FormValue("showid")
+
+		_, err = request.Cookie("showid")
+		data["showID"] = err != http.ErrNoCookie
 
 		data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
-		return
+	} else {
+		data["Error"] = "Таблица не выбрана"
 	}
-	data["Error"] = "Таблица не выбрана"
 }
 
 func (s *HTTPService) insertHandler(writer http.ResponseWriter, request *http.Request) {
@@ -128,10 +149,11 @@ func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Re
 	row := strings.Split(strings.Trim(request.URL.Query().Get("row"), "[] "), " ")
 	cols := strings.Split(request.URL.Query().Get("cols"), ", ")
 
+	cols = strings.Split(cols[0], " ")
 	data.Columns.Values = make([]sqlservice.Column, len(cols))
 	for i, col := range cols {
 		data.Columns.Values[i] = sqlservice.Column{
-			Name: col,
+			Name: strings.Trim(col, " []{}"),
 		}
 	}
 	data.Data[0] = row
@@ -182,4 +204,8 @@ func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Re
 	}
 	url := fmt.Sprintf("/table/%s", tableName)
 	http.Redirect(writer, request, url, http.StatusFound)
+}
+
+func (s *HTTPService) selectHandler(writer http.ResponseWriter, request *http.Request) {
+
 }

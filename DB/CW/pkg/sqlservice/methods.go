@@ -11,6 +11,13 @@ import (
 
 type Row = []string
 
+const (
+	SelectRequestByWorker = iota
+	SelectUndoneRequests
+	SelectOverdueRequests
+	GetRequestNumber
+)
+
 type Column struct {
 	Name string `db:"column_name"`
 	Type string `db:"data_type"`
@@ -66,18 +73,20 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 		cols Header
 		data []Row
 	)
-	query := fmt.Sprintf("select * from %s", tableName)
+
+	query := fmt.Sprintf("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '%s';", tableName)
+	err := s.db.SelectContext(ctx, &cols.Values, query)
+	if err != nil {
+		return nil, err
+	}
+	cols.IDColumn = cols.Values[0].Name
+
+	query = fmt.Sprintf("select * from %s order by %s", tableName, cols.IDColumn)
 	mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
 	if err != nil {
 		return nil, fmt.Errorf("select all: %v", err)
 	}
 
-	query = fmt.Sprintf("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '%s';", tableName)
-	err = s.db.SelectContext(ctx, &cols.Values, query)
-	if err != nil {
-		return nil, err
-	}
-	cols.IDColumn = cols.Values[0].Name
 	data = make([]Row, len(mapString))
 	for i, row := range mapString {
 		dataRow := make(Row, len(cols.Values))
@@ -166,4 +175,17 @@ func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
 		return err
 	}
 	return nil
+}
+
+func (s *SQLService) Select(ctx context.Context, reqtype int, params ...any) (data Table, err error) {
+	switch reqtype {
+	case SelectRequestByWorker:
+		query := "select * from repair_request inner join performer using(worker_id) group by worker_id"
+		mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
+		if err != nil {
+			return data, err
+		}
+		mapString = mapString
+	}
+	return data, nil
 }

@@ -45,7 +45,8 @@ tr:last-child > td:last-child {
 }
 
 main{
-    max-width:600px;
+    min-width: fit-content;
+    width: 600px;
     margin: 3em auto;
     background-color: #fff;
     padding: 20px;
@@ -127,4 +128,8 @@ header ul > li:first-child > a{
     border-radius: 7px;
     background-color: #bd7373;
     color: #ffffff;
+}
+
+main li {
+    color: #42275b;
 }
