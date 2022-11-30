@@ -20,7 +20,7 @@ func (s *HTTPService) addHandlers() {
 	s.mux.HandleFunc("/", s.indexHandler)
 	s.mux.HandleFunc("/table/{tableName}", s.tableHandler)
 	s.mux.HandleFunc("/insert/{tableName}", s.insertHandler)
-	//s.mux.HandleFunc("/update/{tableName}", s.updateHandler)
+	s.mux.HandleFunc("/update/{tableName}", s.updateHandler)
 	s.mux.HandleFunc("/delete/{tableName}", s.deleteHandler)
 }
 
@@ -78,16 +78,12 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 			data["SubError"] = err.Error()
 			return
 		}
-		if len(table.Data) > 0 {
-			data["Table"] = *table
-		} else {
-			data["Error"] = template.HTML(
-				fmt.Sprintf("В таблице <span class=\"mono\">%s</span> нет данных.",
-					tableName))
-			return
-		}
+		data["Table"] = *table
 		inErr := request.FormValue("inError")
 		data["inError"] = inErr
+		data["showID"] = request.FormValue("showid")
+
+		data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
 		return
 	}
 	data["Error"] = "Таблица не выбрана"
@@ -109,7 +105,7 @@ func (s *HTTPService) insertHandler(writer http.ResponseWriter, request *http.Re
 			http.Redirect(writer, request, url, http.StatusFound)
 			return
 		}
-		data.Columns = append(data.Columns, col)
+		data.Columns.Values = append(data.Columns.Values, col)
 		data.Data[0] = append(data.Data[0], val[0])
 	}
 	err := s.db.Insert(ctx, data)
@@ -132,9 +128,9 @@ func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Re
 	row := strings.Split(strings.Trim(request.URL.Query().Get("row"), "[] "), " ")
 	cols := strings.Split(request.URL.Query().Get("cols"), ", ")
 
-	data.Columns = make([]sqlservice.Column, len(cols))
+	data.Columns.Values = make([]sqlservice.Column, len(cols))
 	for i, col := range cols {
-		data.Columns[i] = sqlservice.Column{
+		data.Columns.Values[i] = sqlservice.Column{
 			Name: col,
 		}
 	}
@@ -147,4 +143,43 @@ func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Re
 		return
 	}
 	http.Redirect(writer, request, "/table/"+tableName, http.StatusFound)
+}
+
+func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Request) {
+	_, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	defer cancelFunc()
+	tableName := mux.Vars(request)["tableName"]
+
+	var data sqlservice.Table
+	data.Name = tableName
+	data.Data = make([][]string, 1)
+	data.Data[0] = []string{request.URL.Query().Get("id")}
+	data.Columns.Values = []sqlservice.Column{{
+		Name: request.URL.Query().Get("idCol"),
+		Type: "integer",
+	}}
+	data.Columns.IDColumn = data.Columns.Values[0].Name
+	for key, val := range request.URL.Query() {
+		if key == "idCol" || key == "id" {
+			continue
+		}
+		var col sqlservice.Column
+		err := json.Unmarshal([]byte(key), &col)
+		if err != nil {
+			url := fmt.Sprintf("/table/%s?inError=%s", tableName, err.Error())
+			http.Redirect(writer, request, url, http.StatusFound)
+			return
+		}
+		data.Columns.Values = append(data.Columns.Values, col)
+		data.Data[0] = append(data.Data[0], val[0])
+	}
+
+	err := s.db.Update(request.Context(), data)
+	if err != nil {
+		s.logger.Println(err)
+		url := fmt.Sprintf("/table/%s?inError=%s", tableName, err)
+		http.Redirect(writer, request, url, http.StatusFound)
+	}
+	url := fmt.Sprintf("/table/%s", tableName)
+	http.Redirect(writer, request, url, http.StatusFound)
 }

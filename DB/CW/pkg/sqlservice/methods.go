@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	sql_json "github.com/elgs/gosqljson"
+	"strconv"
 	"strings"
 )
 
@@ -15,10 +16,13 @@ type Column struct {
 	Type string `db:"data_type"`
 }
 
-type Header []Column
+type Header struct {
+	Values   []Column
+	IDColumn string
+}
 
 func (c Header) getIndex(name string) (int, bool) {
-	for i, col := range c {
+	for i, col := range c.Values {
 		if col.Name == name {
 			return i, true
 		}
@@ -28,7 +32,7 @@ func (c Header) getIndex(name string) (int, bool) {
 
 func (c Header) String() string {
 	var sb strings.Builder
-	for i, col := range c {
+	for i, col := range c.Values {
 		if i > 0 {
 			sb.WriteString(", ")
 		}
@@ -41,6 +45,7 @@ type Table struct {
 	Name    string
 	Columns Header
 	Data    []Row
+	NextID  int
 }
 
 func (s *SQLService) GetTableList(ctx context.Context) (tableList Row, err error) {
@@ -68,13 +73,14 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 	}
 
 	query = fmt.Sprintf("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '%s';", tableName)
-	err = s.db.SelectContext(ctx, &cols, query)
+	err = s.db.SelectContext(ctx, &cols.Values, query)
 	if err != nil {
 		return nil, err
 	}
+	cols.IDColumn = cols.Values[0].Name
 	data = make([]Row, len(mapString))
 	for i, row := range mapString {
-		dataRow := make(Row, len(cols))
+		dataRow := make(Row, len(cols.Values))
 		for key, val := range row {
 			index, ok := cols.getIndex(key)
 			if ok {
@@ -83,10 +89,18 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 		}
 		data[i] = dataRow
 	}
+	var lastID int
+	if len(data) > 0 {
+		lastID, _ = strconv.Atoi(data[len(data)-1][0])
+	} else {
+		lastID = 0
+	}
 	return &Table{
 		Name:    tableName,
 		Columns: cols,
-		Data:    data}, nil
+		Data:    data,
+		NextID:  lastID + 1,
+	}, nil
 }
 
 func (s *SQLService) parse(in string) (out string) {
@@ -101,7 +115,7 @@ func (s *SQLService) Insert(ctx context.Context, rows Table) error {
 	for _, row := range rows.Data {
 		var tmp Row
 		for i, el := range row {
-			if rows.Columns[i].Type == "integer" {
+			if rows.Columns.Values[i].Type == "integer" {
 				if el == "" {
 					el = "0"
 				}
@@ -121,7 +135,7 @@ func (s *SQLService) Insert(ctx context.Context, rows Table) error {
 }
 
 func (s *SQLService) Delete(ctx context.Context, rows Table) error {
-	idColumn := rows.Columns[0].Name
+	idColumn := rows.Columns.Values[0].Name
 	for _, row := range rows.Data {
 		id := row[0]
 		query := fmt.Sprintf("delete from %s where %s = %s", rows.Name, idColumn, id)
@@ -129,6 +143,27 @@ func (s *SQLService) Delete(ctx context.Context, rows Table) error {
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
+	setStr := ""
+	for i, el := range data.Data[0] {
+		if data.Columns.Values[i].Name != data.Columns.IDColumn {
+			var formatStr string
+			if data.Columns.Values[i].Type == "integer" {
+				formatStr += "%s=%s, "
+			} else {
+				formatStr = "%s='%s', "
+			}
+			setStr += fmt.Sprintf(formatStr, data.Columns.Values[i].Name, el)
+		}
+	}
+	query := fmt.Sprintf("update %s set %s where %s = %s", data.Name, setStr[:len(setStr)-2], data.Columns.Values[0].Name, data.Data[0][0])
+	_, err := s.db.ExecContext(ctx, query)
+	if err != nil {
+		return err
 	}
 	return nil
 }

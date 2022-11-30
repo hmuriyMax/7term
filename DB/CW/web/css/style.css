@@ -36,6 +36,10 @@ tr:not(:first-child):not(:last-child) > td:last-child{
     background-color: #e39393;
 }
 
+tr:last-child{
+    background-color: rgba(147, 227, 147, 0.22);
+}
+
 tr:last-child > td:last-child {
     background-color: #93e393;
 }

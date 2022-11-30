@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Main</title>
     <link rel="stylesheet" href="/res/css/style.css">
+    <style>
+        {{if not .showID}}
+        tr > td:first-child{
+            display: none;
+        }
+        {{end}}
+    </style>
 </head>
 <body>
     <header>
@@ -20,19 +27,51 @@
         {{if .Table}}
         <div>Таблица: <span class="mono">{{.Table.Name}}</span></div>
         {{$tablename := .Table.Name}}
-        {{$tablecols := .Table.Columns}}
+        {{$tablecols := .Table.Columns.Values}}
+        {{$nextID := .Table.NextID}}
+        {{$idCol := .Table.Columns.IDColumn}}
+        {{$editingID := .editingID}}
             <table class="mono">
                 <tr>
-                    {{range .Table.Columns}}
+                    {{range .Table.Columns.Values}}
                     <td>{{.Name}}</td>
                     {{end}}
+                    <td></td>
                     <td></td>
                 </tr>
                 {{range .Table.Data}}
                 <tr>
-                    {{range .}}
+                    {{$thisID := "-1"}}
+                    {{range $index, $row :=  .}}
+                        {{if eq $thisID "-1"}}
+                        {{$thisID = .}}
                         <td>{{.}}</td>
+                        {{else if eq $thisID $editingID}}
+                        <td><label>
+                            {{$column := index $tablecols $index}}
+                            <input form="upd" placeholder="Новое значение:"
+                                   value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
+                        </label></td>
+                        {{else}}
+                        <td>{{.}}</td>
+                        {{end}}
                     {{end}}
+                    <td>
+                        {{if eq $editingID $thisID}}
+                        <form action="/update/{{$tablename}}" method="get" id="upd">
+<!--                            <input type="hidden" name="cols" value="{{$tablecols}}">-->
+                            <input type="hidden" name="id" value="{{$thisID}}">
+                            <input type="hidden" name="idCol" value="{{$idCol}}">
+                            <input type="submit" value="s" alt="Сохранить">
+                        </form>
+                        {{else}}
+                        <form action="/table/{{$tablename}}" method="get">
+                            <input type="hidden" name="cols" value="{{$tablecols}}">
+                            <input type="hidden" name="row" value="{{.}}">
+                            <input type="submit" value="e" alt="Изменить">
+                        </form>
+                        {{end}}
+                    </td>
                     <td>
                         <form action="/delete/{{$tablename}}" method="get">
                             <input type="hidden" name="row" value="{{.}}">
@@ -42,14 +81,16 @@
                     <tr>
                 {{end}}
                 <tr>
-                    {{range .Table.Columns}}
+                    {{range .Table.Columns.Values}}
                     <td><label>
                         <input type="text" form="ins"
                                name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
-                               placeholder="Введите {{.Name}}">
+                               placeholder="Введите {{.Name}}"
+                               {{if eq .Name $idCol}}
+                               value="{{$nextID}}" readonly {{end}}>
                     </label></td>
                     {{end}}
-                    <td>
+                    <td colspan="2">
                         <form action="/insert/{{$tablename}}" method="get" id="ins">
                             <input type="submit" value="+" alt="Добавить">
                         </form>
@@ -58,6 +99,11 @@
             </table>
         {{if .inError}}
             <div id="inlineErr">{{.inError}}</div>
+        {{end}}
+        {{if .showID}}
+        <a class="mono" href="/table/{{$tablename}}">Скрыть ID</a>
+        {{else}}
+        <a class="mono" href="/table/{{$tablename}}?showid=1">Показать ID</a>
         {{end}}
         {{else}}
             <div id="errMain">{{.Error}}</div>
