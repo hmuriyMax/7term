@@ -1,0 +1,14 @@
+C:\prog\7term\Security\lab6\bin\Debug\lab6.exe.config
+C:\prog\7term\Security\lab6\bin\Debug\lab6.exe
+C:\prog\7term\Security\lab6\bin\Debug\lab6.pdb
+C:\prog\7term\Security\lab6\obj\Debug\lab6.csproj.AssemblyReference.cache
+C:\prog\7term\Security\lab6\obj\Debug\lab6.csproj.SuggestedBindingRedirects.cache
+C:\prog\7term\Security\lab6\obj\Debug\lab6.Form1.resources
+C:\prog\7term\Security\lab6\obj\Debug\lab6.Properties.Resources.resources
+C:\prog\7term\Security\lab6\obj\Debug\lab6.csproj.GenerateResource.cache
+C:\prog\7term\Security\lab6\obj\Debug\lab6.csproj.CoreCompileInputs.cache
+C:\prog\7term\Security\lab6\obj\Debug\lab6.exe
+C:\prog\7term\Security\lab6\obj\Debug\lab6.pdb
+C:\prog\7term\Security\lab6\obj\Debug\lab6.Form2.resources
+C:\prog\7term\Security\lab6\bin\Debug\Microsoft.Win32.Registry.dll
+C:\prog\7term\Security\lab6\obj\Debug\lab6.csproj.CopyComplete
