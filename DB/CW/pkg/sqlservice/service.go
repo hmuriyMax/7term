@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 type SQLService struct {
@@ -14,15 +15,17 @@ type SQLService struct {
 	port     string
 	dbName   string
 	db       *sqlx.DB
+	lg       *log.Logger
 }
 
-func NewSQLService(username, password, host, port, dbName string) *SQLService {
+func NewSQLService(username, password, host, port, dbName string, lg *log.Logger) *SQLService {
 	return &SQLService{
 		username: username,
 		password: password,
 		host:     host,
 		port:     port,
 		dbName:   dbName,
+		lg:       lg,
 	}
 }
 

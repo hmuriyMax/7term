@@ -10,6 +10,32 @@
             display: none;
         }
         {{end}}
+        {{if .Controls}}
+
+        tr > td:last-child, tr:not(:last-child) > td:nth-last-child(2){
+            padding: 0;
+            min-width: 3vh;
+            min-height: 3vh;
+            font-weight: bold;
+        }
+
+        tr:not(:first-child):not(:last-child) > td:last-child{
+            background-color: #e39393;
+        }
+
+        tr:not(:first-child):not(:last-child) > td:nth-last-child(2){
+            color: #fff;
+            background-color: #42275b;
+        }
+
+        tr:last-child{
+            background-color: rgba(147, 227, 147, 0.22);
+        }
+
+        tr:last-child > td:last-child {
+            background-color: #93e393;
+        }
+        {{end}}
     </style>
 </head>
 <body>
@@ -31,13 +57,16 @@
         {{$nextID := .Table.NextID}}
         {{$idCol := .Table.Columns.IDColumn}}
         {{$editingID := .editingID}}
+        {{$controls := .Controls}}
             <table class="mono">
                 <tr>
                     {{range .Table.Columns.Values}}
                     <td>{{.Name}}</td>
                     {{end}}
+                    {{if $controls}}
                     <td></td>
                     <td></td>
+                    {{end}}
                 </tr>
                 {{range .Table.Data}}
                 <tr>
@@ -49,13 +78,15 @@
                         {{else if eq $thisID $editingID}}
                         <td><label>
                             {{$column := index $tablecols $index}}
-                            <input form="upd" placeholder="Новое значение:" type="{{if eq $column.Type "timestamp without time zone"}}datetime-local{{else}} text{{end}}"
+                            <input form="upd" placeholder="Новое значение:" type="
+                            {{if eq $column.Type "timestamp"}}datetime-local{{else}} text{{end}}"
                                    value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
                         </label></td>
                         {{else}}
                         <td>{{.}}</td>
                         {{end}}
                     {{end}}
+                    {{if $controls}}
                     <td>
                         {{if eq $editingID $thisID}}
                         <form action="/update/{{$tablename}}" method="get" id="upd">
@@ -79,7 +110,9 @@
                             <input type="submit" value="×" style="color: white;" alt="Удалить">
                         </form>
                     <tr>
+                    {{end}}
                 {{end}}
+                {{if $controls}}
                 <tr>
                     {{range .Table.Columns.Values}}
                     <td><label>
@@ -96,14 +129,17 @@
                         </form>
                     </td>
                 </tr>
+                {{end}}
             </table>
         {{if .inError}}
             <div id="inlineErr">{{.inError}}</div>
         {{end}}
+        {{if $controls}}
         {{if .showID}}
         <a class="mono" href="/table/{{$tablename}}?showid=0">Скрыть ID</a>
         {{else}}
         <a class="mono" href="/table/{{$tablename}}?showid=1">Показать ID</a>
+        {{end}}
         {{end}}
         {{else}}
             <div id="errMain">{{.Error}}</div>

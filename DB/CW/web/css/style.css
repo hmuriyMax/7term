@@ -20,36 +20,13 @@ tr:first-child{
     font-weight: bold;
     background-color: #333;
     color: #fff;
+    text-transform: capitalize;
 }
 
 td{
     border-left: 1px solid #333;
     border-bottom: 1px solid #333;
     padding: 0.5vh 10px;
-}
-
-tr > td:last-child, tr:not(:last-child) > td:nth-last-child(2){
-    padding: 0;
-    min-width: 3vh;
-    min-height: 3vh;
-    font-weight: bold;
-}
-
-tr:not(:first-child):not(:last-child) > td:last-child{
-    background-color: #e39393;
-}
-
-tr:not(:first-child):not(:last-child) > td:nth-last-child(2){
-    color: #fff;
-    background-color: #42275b;
-}
-
-tr:last-child{
-    background-color: rgba(147, 227, 147, 0.22);
-}
-
-tr:last-child > td:last-child {
-    background-color: #93e393;
 }
 
 main{

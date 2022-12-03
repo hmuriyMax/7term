@@ -9,8 +9,11 @@ import (
 )
 
 func main() {
-	sqlSvc := sqlservice.NewSQLService("postgres", "postgrespw",
-		"localhost", "55000", "course_work")
+	logger := log.Default()
+	logger.SetFlags(log.Ldate | log.Lmicroseconds)
+
+	sqlSvc := sqlservice.NewSQLService("postgres", "",
+		"192.168.142.4", "5432", "tech_support_db", logger)
 	sqlContext, cancelSql := context.WithTimeout(context.Background(), time.Second)
 	defer cancelSql()
 	err := sqlSvc.Start(sqlContext)
@@ -18,7 +21,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1")
+	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1", logger)
 	httpSvc.ConnectToDataBase(sqlSvc)
 	httpSvc.Start()
 

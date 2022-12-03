@@ -22,7 +22,7 @@ func (s *HTTPService) addHandlers() {
 	s.mux.HandleFunc("/insert/{tableName}", s.insertHandler)
 	s.mux.HandleFunc("/update/{tableName}", s.updateHandler)
 	s.mux.HandleFunc("/delete/{tableName}", s.deleteHandler)
-	s.mux.HandleFunc("/select/{tableName}", s.selectHandler)
+	s.mux.HandleFunc("/reports/{reportName}", s.reportHandler)
 }
 
 func (s *HTTPService) indexHandler(writer http.ResponseWriter, request *http.Request) {
@@ -57,7 +57,7 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 		http.SetCookie(writer, &http.Cookie{
 			Name:   "showid",
 			Value:  request.FormValue("showid"),
-			MaxAge: int(10 * time.Hour.Seconds()),
+			MaxAge: int(10 * time.Second.Seconds()),
 		})
 		http.Redirect(writer, request, request.URL.Path, http.StatusFound)
 		return
@@ -103,7 +103,7 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 
 		_, err = request.Cookie("showid")
 		data["showID"] = err != http.ErrNoCookie
-
+		data["Controls"] = true
 		data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
 	} else {
 		data["Error"] = "Таблица не выбрана"
@@ -111,7 +111,7 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 }
 
 func (s *HTTPService) insertHandler(writer http.ResponseWriter, request *http.Request) {
-	ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Second)
 	defer cancelFunc()
 	tableName := mux.Vars(request)["tableName"]
 
@@ -139,7 +139,7 @@ func (s *HTTPService) insertHandler(writer http.ResponseWriter, request *http.Re
 }
 
 func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Request) {
-	ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	ctx, cancelFunc := context.WithTimeout(request.Context(), 1*time.Second)
 	defer cancelFunc()
 	tableName := mux.Vars(request)["tableName"]
 
@@ -168,7 +168,7 @@ func (s *HTTPService) deleteHandler(writer http.ResponseWriter, request *http.Re
 }
 
 func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Request) {
-	_, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	_, cancelFunc := context.WithTimeout(request.Context(), 1*time.Second)
 	defer cancelFunc()
 	tableName := mux.Vars(request)["tableName"]
 
@@ -206,6 +206,32 @@ func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Re
 	http.Redirect(writer, request, url, http.StatusFound)
 }
 
-func (s *HTTPService) selectHandler(writer http.ResponseWriter, request *http.Request) {
+func (s *HTTPService) reportHandler(writer http.ResponseWriter, request *http.Request) {
+	_, cancelFunc := context.WithTimeout(request.Context(), 1*time.Hour)
+	defer cancelFunc()
+	indexPath := HTMLPath + "table.html"
+	pageTemplate := template.Must(template.ParseFiles(indexPath))
+	reportName := mux.Vars(request)["reportName"]
 
+	data := make(map[string]interface{})
+	defer func() {
+		err := pageTemplate.Execute(writer, data)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+	}()
+	table, err := s.db.Report(request.Context(), sqlservice.ReportType(reportName))
+	if err != nil {
+		data["Error"] = template.HTML(
+			fmt.Sprintf("Не удалось открыть <span class=\"mono\">%s</span>:", table.Name))
+		data["SubError"] = err.Error()
+		return
+	}
+	data["Table"] = *table
+	inErr := request.FormValue("inError")
+	data["inError"] = inErr
+	data["Controls"] = false
+	data["showID"] = "1"
+
+	data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
 }

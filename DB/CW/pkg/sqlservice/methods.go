@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	sqr "github.com/Masterminds/squirrel"
+	"strconv"
 
 	"sort"
 	"strings"
@@ -12,12 +13,21 @@ import (
 
 type Row = []string
 
+type ReportType string
+
 const (
-	SelectRequestByWorker = iota
-	SelectUndoneRequests
-	SelectOverdueRequests
-	GetRequestNumber
+	SelectRequestsByWorker ReportType = "requests_by_worker"
+	SelectUndoneRequests   ReportType = "undone_requests"
+	SelectOverdueRequests  ReportType = "overdue_requests"
+	GetRequestNumber       ReportType = "request_number"
 )
+
+var taskMap = map[ReportType]string{
+	SelectUndoneRequests:   "Отчет о невыполненных заявках по исполнителям",
+	SelectRequestsByWorker: "Контроль исполнения заявок по исполнителям",
+	SelectOverdueRequests:  "Отчет о заявках, выполненных с превышением срока",
+	GetRequestNumber:       "Отчет о количестве заявок заданного типа",
+}
 
 type SortFlag int8
 
@@ -84,6 +94,8 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 		return nil, fmt.Errorf("selectAll: %v", err)
 	}
 	tbl.Name = tableName
+	tbl.Columns.IDColumn = tbl.Columns.Values[0].Name
+	tbl.NextID, err = strconv.Atoi(tbl.Data[len(tbl.Data)-1][0])
 	return tbl, nil
 }
 
@@ -153,16 +165,21 @@ func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
 }
 
 func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder, sortFlag SortFlag) (*Table, error) {
-	var data Table
+	data := &Table{}
+	sql, _, err := query.ToSql()
+	if err != nil {
+		return data, fmt.Errorf("select by query: %v", err)
+	}
+	s.lg.Printf("query: %s\n", sql)
 
 	rows, err := query.QueryContext(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("select by query: %v", err)
+		return data, fmt.Errorf("select by query: %v", err)
 	}
 
 	columns, _ := rows.ColumnTypes()
 	if len(columns) == 0 {
-		return nil, fmt.Errorf("error parsing columns")
+		return data, fmt.Errorf("select by query: error parsing columns")
 	}
 
 	for _, col := range columns {
@@ -171,7 +188,6 @@ func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder
 			Type: strings.ToLower(col.DatabaseTypeName()),
 		})
 	}
-	data.Columns.IDColumn = columns[0].Name()
 
 	for rows.Next() {
 		var strRow Row
@@ -200,18 +216,45 @@ func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder
 	default:
 		break
 	}
-	data.NextID = len(data.Data) + 1
-	return &data, nil
+	if err != nil {
+		return data, fmt.Errorf("select by query: %v", err)
+	}
+	data.NextID++
+	return data, nil
 }
 
-//switch reqtype {
-//case SelectRequestByWorker:
-//query := `select performer.name, request_id, (finish_stamp is null) as "Выполнено"
-//					from repair_request
-//						inner join performer
-//							using(worker_id)
-//					order by performer.name, request_id;`
-//mapString, err := sql_json.QueryToMap(s.db, sql_json.AsIs, query)
-//if err != nil {
-//return Table{}, err
-//}
+func (s *SQLService) Report(ctx context.Context, name ReportType) (*Table, error) {
+	tbl := &Table{
+		Name: fmt.Sprint(name),
+	}
+	query := sqr.Select().RunWith(s.db)
+	switch name {
+	case SelectUndoneRequests:
+		query = query.Where("finish_stamp is not null")
+		fallthrough
+	case SelectRequestsByWorker:
+		query = query.Columns("performer.name", "request_id").
+			Columns("finish_stamp is null as \"done\"").
+			From("repair_request").
+			LeftJoin("performer using(worker_id)").
+			OrderBy("performer.name", "request_id")
+	case SelectOverdueRequests:
+		query = query.Columns("request_id",
+			"finish_stamp - start_stamp as \"real_duration\"",
+			"duration as \"planned_duration\"").
+			From("repair_request").InnerJoin("repair_type using (repair_type_id)").
+			Where("finish_stamp - start_stamp > duration")
+	case GetRequestNumber:
+		query = query.Columns("request_id")
+	default:
+		return &Table{
+			Name: fmt.Sprintf("report_id: %s", name),
+		}, fmt.Errorf("такого отчета не существует")
+	}
+	tbl, err := s.selectByQuery(ctx, &query, SortNone)
+	tbl.Name = taskMap[name]
+	if err != nil {
+		return tbl, fmt.Errorf("report: %v", err)
+	}
+	return tbl, nil
+}

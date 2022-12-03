@@ -22,12 +22,12 @@ type HTTPService struct {
 	logger  *log.Logger
 }
 
-func NewHTTPService(port int, host string) (srv HTTPService) {
+func NewHTTPService(port int, host string, lg *log.Logger) (srv HTTPService) {
 	srv.port = port
 	srv.host = host
 	srv.errChan = make(chan error)
 	srv.ctx, srv.cancel = context.WithCancel(context.Background())
-	srv.logger = log.Default()
+	srv.logger = lg
 	srv.logger.SetFlags(log.Ldate | log.Lmicroseconds)
 	srv.mux = mux.NewRouter()
 
