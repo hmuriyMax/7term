@@ -95,7 +95,11 @@ func (s *SQLService) SelectAll(ctx context.Context, tableName string) (*Table, e
 	}
 	tbl.Name = tableName
 	tbl.Columns.IDColumn = tbl.Columns.Values[0].Name
-	tbl.NextID, err = strconv.Atoi(tbl.Data[len(tbl.Data)-1][0])
+	tbl.NextID = 1
+	if len(tbl.Data) > 0 {
+		tbl.NextID, err = strconv.Atoi(tbl.Data[len(tbl.Data)-1][0])
+		tbl.NextID++
+	}
 	return tbl, nil
 }
 
@@ -211,7 +215,9 @@ func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder
 	switch sortFlag {
 	case SortByID:
 		sort.Slice(data.Data, func(i, j int) bool {
-			return data.Data[i][0] < data.Data[j][0]
+			a, _ := strconv.Atoi(data.Data[i][0])
+			b, _ := strconv.Atoi(data.Data[j][0])
+			return a < b
 		})
 	default:
 		break
@@ -219,7 +225,6 @@ func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder
 	if err != nil {
 		return data, fmt.Errorf("select by query: %v", err)
 	}
-	data.NextID++
 	return data, nil
 }
 
