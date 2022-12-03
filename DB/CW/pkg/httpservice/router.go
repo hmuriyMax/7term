@@ -57,12 +57,12 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 		http.SetCookie(writer, &http.Cookie{
 			Name:   "showid",
 			Value:  request.FormValue("showid"),
-			MaxAge: int(10 * time.Second.Seconds()),
+			MaxAge: int(10 * time.Hour.Seconds()),
 		})
 		http.Redirect(writer, request, request.URL.Path, http.StatusFound)
 		return
 	}
-	if request.FormValue("showid") == "0" {
+	if request.FormValue("showid") == "-1" {
 		http.SetCookie(writer, &http.Cookie{
 			Name:   "showid",
 			Value:  request.FormValue("showid"),
