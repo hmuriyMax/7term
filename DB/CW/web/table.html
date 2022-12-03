@@ -58,6 +58,7 @@
         {{$idCol := .Table.Columns.IDColumn}}
         {{$editingID := .editingID}}
         {{$controls := .Controls}}
+        {{$readonly := .IDro}}
             <table class="mono">
                 <tr>
                     {{range .Table.Columns.Values}}
@@ -72,14 +73,15 @@
                 <tr>
                     {{$thisID := "-1"}}
                     {{range $index, $row :=  .}}
-                        {{if eq $thisID "-1"}}
+                        {{if eq $index 0}}
                         {{$thisID = .}}
+                        {{end}}
+                        {{if and (eq $index 0) $readonly}}
                         <td>{{.}}</td>
                         {{else if eq $thisID $editingID}}
                         <td><label>
                             {{$column := index $tablecols $index}}
-                            <input form="upd" placeholder="Новое значение:" type="
-                            {{if eq $column.Type "timestamp"}}datetime-local{{else}} text{{end}}"
+                            <input form="upd" placeholder="Новое значение:" type="{{if eq $column.Type "timestamp"}}datetime-local{{else}}text{{end}}"
                                    value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
                         </label></td>
                         {{else}}
@@ -116,11 +118,11 @@
                 <tr>
                     {{range .Table.Columns.Values}}
                     <td><label>
-                        <input type="{{if eq .Type "timestamp without time zone"}}datetime-local{{else}} text{{end}}" form="ins"
+                        <input type="{{if eq .Type "timestamp"}}datetime-local{{else}}text{{end}}" form="ins"
                                name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
                                placeholder="Введите {{.Name}}"
                                {{if eq .Name $idCol}}
-                               value="{{$nextID}}" readonly {{end}}>
+                               value="{{$nextID}}"{{if $readonly}} readonly{{end}}{{end}}>
                     </label></td>
                     {{end}}
                     <td colspan="2">

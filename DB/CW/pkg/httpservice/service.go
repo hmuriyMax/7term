@@ -11,18 +11,19 @@ import (
 )
 
 type HTTPService struct {
-	port    int
-	host    string
-	mux     *mux.Router
-	server  *http.Server
-	db      *sqlservice.SQLService
-	errChan chan error
-	ctx     context.Context
-	cancel  context.CancelFunc
-	logger  *log.Logger
+	port       int
+	host       string
+	mux        *mux.Router
+	server     *http.Server
+	db         *sqlservice.SQLService
+	errChan    chan error
+	ctx        context.Context
+	cancel     context.CancelFunc
+	logger     *log.Logger
+	IDEditable bool
 }
 
-func NewHTTPService(port int, host string, lg *log.Logger) (srv HTTPService) {
+func NewHTTPService(port int, host string, lg *log.Logger, IDEditable bool) (srv HTTPService) {
 	srv.port = port
 	srv.host = host
 	srv.errChan = make(chan error)
@@ -30,6 +31,7 @@ func NewHTTPService(port int, host string, lg *log.Logger) (srv HTTPService) {
 	srv.logger = lg
 	srv.logger.SetFlags(log.Ldate | log.Lmicroseconds)
 	srv.mux = mux.NewRouter()
+	srv.IDEditable = IDEditable
 
 	srv.server = &http.Server{
 		Addr:        fmt.Sprintf("%s:%d", srv.host, srv.port),

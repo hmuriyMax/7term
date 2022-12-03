@@ -105,6 +105,11 @@ func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Req
 		data["showID"] = err != http.ErrNoCookie
 		data["Controls"] = true
 		data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
+		if !s.IDEditable {
+			data["IDro"] = 1
+		} else {
+			data["IDro"] = 0
+		}
 	} else {
 		data["Error"] = "Таблица не выбрана"
 	}
