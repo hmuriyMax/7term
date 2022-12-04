@@ -180,7 +180,7 @@ func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Re
 	var data sqlservice.Table
 	data.Name = tableName
 	data.Data = make([][]string, 1)
-	data.Data[0] = []string{request.URL.Query().Get("id")}
+	id := request.URL.Query().Get("id")
 	data.Columns.Values = []sqlservice.Column{{
 		Name: request.URL.Query().Get("idCol"),
 		Type: "integer",
@@ -197,11 +197,13 @@ func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Re
 			http.Redirect(writer, request, url, http.StatusFound)
 			return
 		}
-		data.Columns.Values = append(data.Columns.Values, col)
+		if col.Name != data.Columns.IDColumn {
+			data.Columns.Values = append(data.Columns.Values, col)
+		}
 		data.Data[0] = append(data.Data[0], val[0])
 	}
 
-	err := s.db.Update(request.Context(), data)
+	err := s.db.Update(request.Context(), data, id)
 	if err != nil {
 		s.logger.Println(err)
 		url := fmt.Sprintf("/table/%s?inError=%s", tableName, err)
@@ -225,7 +227,7 @@ func (s *HTTPService) reportHandler(writer http.ResponseWriter, request *http.Re
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
 	}()
-	table, err := s.db.Report(request.Context(), sqlservice.ReportType(reportName))
+	table, err := s.db.Report(request.Context(), sqlservice.ReportType(reportName), request.URL.Query())
 	if err != nil {
 		data["Error"] = template.HTML(
 			fmt.Sprintf("Не удалось открыть <span class=\"mono\">%s</span>:", table.Name))
@@ -237,6 +239,4 @@ func (s *HTTPService) reportHandler(writer http.ResponseWriter, request *http.Re
 	data["inError"] = inErr
 	data["Controls"] = false
 	data["showID"] = "1"
-
-	data["editingID"] = strings.Split(strings.Trim(request.FormValue("row"), "[] "), " ")[0]
 }

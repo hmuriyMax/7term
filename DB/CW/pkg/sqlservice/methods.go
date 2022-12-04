@@ -145,7 +145,7 @@ func (s *SQLService) Delete(ctx context.Context, rows Table) error {
 	return nil
 }
 
-func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
+func (s *SQLService) Update(ctx context.Context, data Table, id string) interface{} {
 	setStr := ""
 	for i, el := range data.Data[0] {
 		if data.Columns.Values[i].Name != data.Columns.IDColumn {
@@ -160,7 +160,8 @@ func (s *SQLService) Update(ctx context.Context, data Table) interface{} {
 			setStr += fmt.Sprintf(formatStr, data.Columns.Values[i].Name, el)
 		}
 	}
-	query := fmt.Sprintf("update %s set %s where %s = %s", data.Name, setStr[:len(setStr)-2], data.Columns.Values[0].Name, data.Data[0][0])
+	query := fmt.Sprintf("update %s set %s where %s = %s", data.Name, setStr[:len(setStr)-2],
+		data.Columns.IDColumn, id)
 	_, err := s.db.ExecContext(ctx, query)
 	if err != nil {
 		return err
@@ -228,7 +229,7 @@ func (s *SQLService) selectByQuery(ctx context.Context, query *sqr.SelectBuilder
 	return data, nil
 }
 
-func (s *SQLService) Report(ctx context.Context, name ReportType) (*Table, error) {
+func (s *SQLService) Report(ctx context.Context, name ReportType, params map[string][]string) (*Table, error) {
 	tbl := &Table{
 		Name: fmt.Sprint(name),
 	}
@@ -250,7 +251,14 @@ func (s *SQLService) Report(ctx context.Context, name ReportType) (*Table, error
 			From("repair_request").InnerJoin("repair_type using (repair_type_id)").
 			Where("finish_stamp - start_stamp > duration")
 	case GetRequestNumber:
-		query = query.Columns("request_id")
+		typeId, err := strconv.Atoi(params["type_id"][0])
+		if err != nil {
+			return tbl, fmt.Errorf("report get request number: %v", err)
+		}
+		query = query.Columns("repair_type_id", "count(request_id) as \"number\"").
+			From("repair_request").
+			Where(fmt.Sprintf("repair_type_id = %s", typeId)).
+			GroupBy("repair_type_id")
 	default:
 		return &Table{
 			Name: fmt.Sprintf("report_id: %s", name),
