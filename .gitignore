@@ -160,3 +160,5 @@ cython_debug/
 Материалы/ПракМетопт11/
 
 *.exe
+
+.DS_Store

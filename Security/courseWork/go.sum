@@ -1,6 +1,0 @@
-github.com/andviro/go-cryptoapi v1.0.0 h1:YTbIShBGQpgjvdEJMEmNuGbDRaIVejGZm7P09wK/vcs=
-github.com/andviro/go-cryptoapi v1.0.0/go.mod h1:X3MSQNjFmCl0Qhrb/e0FowVFoDgAXho8SorefG/wwug=
-github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
-github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-gopkg.in/tylerb/is.v1 v1.1.2 h1:AB/MANFml2ySf+adwcinvajyHvsYltAOD+rb/8njfSU=
-gopkg.in/tylerb/is.v1 v1.1.2/go.mod h1:9yQB2tyIhZ5oph6Kk5Sq7cJMd9c5Jpa1p3hr9kxzPqo=
