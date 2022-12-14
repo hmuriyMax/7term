@@ -1,3 +1,65 @@
+select count(*) as "Общее число курсов" from "Course";
+select "TypCrc" as "Тип курса", count(*) as "Количество" from "Course" group by "TypCrc";
+
+select count(*) as "Общее число слушателей" from "Student";
+select "Cty" as "Город", count(*) as "Количество"
+from "Student"
+where "Cty" is not NULL
+group by "Cty";
+
+select count(*) as "Общее число преподавателей" from "Tchr";
+select "Dol" as "Степень", count(*) as "Количество"
+from "Tchr"
+where "Dol" is not NULL
+group by "Dol";
+
+select count(*) as "Общее число преподавателей" from "Tchr";
+select "Sal" as "Стоймость часа", count(*) as "Количество"
+from "Tchr"
+where "Sal" is not NULL
+group by "Sal";
+
+select count(*) as "Общее число курсов" from "Course";
+select "Hur" as "Количество часов", count(*) as "Количество"
+from "Course"
+where "Hur" is not NULL
+group by "Hur";
+
+select count(*) as "Общее число курсов" from "Course";
+select "TypCrc" as "Тип курса", max("Cost") as "Максимальная стоймость"
+from "Course"
+where "TypCrc" is not NULL
+group by "TypCrc";
+
+select count(*) as "Общее число курсов" from "Course";
+select "TypCrc" as "Тип курса", max("Cost") as "Максимальная стоймость"
+from "Course"
+where "TypCrc" is not NULL
+group by "TypCrc";
+
+select count(*) as "Общее число курсов" from "Course";
+select "TypCrc" as "Тип курса", count(*) as "Количество", avg("Cost") as "Средняя стоймость"
+from "Course"
+where "TypCrc" is not NULL
+group by "TypCrc";
+
+select count(*) as "Общее число преподавателей" from "Tchr";
+select "Dol" as "Степень", min("Sal") as "Минимальная стоймость часа", max("Sal") as "Максимальная стоймость часа"
+from "Tchr"
+where "Dol" is not NULL
+group by "Dol";
+
+select count(*) as "Общее число преподавателей" from "Tchr";
+select "Dol" as "Степень", avg("Sal") as "Средняя стоймость часа"
+from "Tchr"
+where "Dol" is not NULL
+group by "Dol";
+
+select count(*) as "Общее число слушателей" from "Student";
+select "disCnt" as "Размер скидки", count(*) as "Количество"
+from "Student"
+where "disCnt" is not NULL
+group by "disCnt";
 CREATE OR REPLACE FUNCTION query1(crs_name VARCHAR(20))
 RETURNS TABLE (ФИО VARCHAR(40), Контакты VARCHAR(20), Название VARCHAR(20), Тип VARCHAR(20))
 AS $$
