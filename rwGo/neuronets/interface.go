@@ -14,6 +14,7 @@ const defaultNeuroFile = "/nn"
 type Neural interface {
 	GetDirPath() string
 	GetResult([]float64) string
+	Forward([]float64) []float64
 }
 
 type BaseNN struct {
