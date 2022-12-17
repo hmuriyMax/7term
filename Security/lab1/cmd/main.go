@@ -17,6 +17,10 @@ const tokensPath = "./tokens"
 var tokens Tokens
 
 func main() {
+	if os.Args[1] != "f7vrcs17ds54" {
+		os.Exit(1)
+	}
+	defer fmt.Scanln()
 	_, err := users.Open(usersPath)
 	if err != nil {
 		log.Fatal(err)
@@ -25,13 +29,13 @@ func main() {
 
 	_, err = tokens.Open(tokensPath)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 	defer tokens.Close()
 
 	port := "80"
-	if len(os.Args) > 1 {
-		port = os.Args[1]
+	if len(os.Args) > 2 {
+		port = os.Args[2]
 	}
 	router := mux.NewRouter()
 	server := http.Server{Handler: router}
