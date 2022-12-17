@@ -3,18 +3,20 @@ package entities
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Data [][]float64
 
 func ConvertToData(strData [][]string) (Data, error) {
-	res := make(Data, len(strData))
+	res := make(Data, 0, len(strData))
 	for i, line := range strData {
-		floatLine := make([]float64, len(line))
-		for _, el := range line {
-			float, err := strconv.ParseFloat(el, 64)
+		floatLine := make([]float64, 0, len(line))
+		for j, el := range line {
+			float, err := strconv.ParseFloat(strings.Trim(el, " "), 64)
 			if err != nil {
-				return nil, fmt.Errorf("failed to parse element \"%v\" on line %d: %v", el, i, err)
+				return nil,
+					fmt.Errorf("failed to parse element \"%v\" on line %d pos %d: %v", el, i+1, j+1, err)
 			}
 			floatLine = append(floatLine, float)
 		}
@@ -24,9 +26,9 @@ func ConvertToData(strData [][]string) (Data, error) {
 }
 
 func (d Data) ConvertToStrings() [][]string {
-	res := make([][]string, len(d))
+	res := make([][]string, 0, len(d))
 	for _, line := range d {
-		strLine := make([]string, len(line))
+		strLine := make([]string, 0, len(line))
 		for _, el := range line {
 			str := fmt.Sprint(el)
 			strLine = append(strLine, str)
