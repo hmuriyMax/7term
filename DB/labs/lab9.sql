@@ -27,12 +27,15 @@ inner join "Tchr" using ("Id_Tch")
 where "NameTch" = 'Сидорова Наталья Петровна'
 order by "Title", "Name_stud";
 
-select "Name_stud", "Cont", "Title", "Hur", "TypCrc"
-from "Contract"
-inner join "Student" using ("Id_Stud")
-inner join "Course" using ("Id_Crs")
-where "Org" = 'МЭИ'
-order by "Title", "Name_stud";
+select *
+from "Student"
+where "Id_Stud" in (
+    select "Id_Stud" from "Contract"
+    where "Id_Crs" in (
+        select "Id_Crs" from "Course"
+    )
+) and "Org" = 'МГУ'
+order by "Name_stud";
 
 select "Name_stud", "Cont", "Org", "Title", "Cost"
 from "Contract"

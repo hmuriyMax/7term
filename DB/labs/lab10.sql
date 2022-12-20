@@ -65,3 +65,20 @@ LANGUAGE 'plpgsql';
 
 SELECT * FROM stats();
 
+create or replace function get_by_org(org_name varchar(20))
+returns table (name varchar(40))
+as $$ BEGIN
+    return query select "Name_stud"
+    from "Student"
+    where "Id_Stud" in (
+        select "Id_Stud" from "Contract"
+        where "Id_Crs" in (
+            select "Id_Crs" from "Course"
+        )
+    ) and "Org" = org_name
+    order by "Name_stud";
+end;
+$$
+LANGUAGE 'plpgsql';
+
+select * from get_by_org('МЭИ');
