@@ -1,0 +1,17 @@
+C:\prog\7term\Security\appValidator\bin\Debug\net6.0-windows\appValidator.exe
+C:\prog\7term\Security\appValidator\bin\Debug\net6.0-windows\appValidator.deps.json
+C:\prog\7term\Security\appValidator\bin\Debug\net6.0-windows\appValidator.runtimeconfig.json
+C:\prog\7term\Security\appValidator\bin\Debug\net6.0-windows\appValidator.dll
+C:\prog\7term\Security\appValidator\bin\Debug\net6.0-windows\appValidator.pdb
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.csproj.AssemblyReference.cache
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.Form1.resources
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.csproj.GenerateResource.cache
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.GeneratedMSBuildEditorConfig.editorconfig
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.AssemblyInfoInputs.cache
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.AssemblyInfo.cs
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.csproj.CoreCompileInputs.cache
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.dll
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\refint\appValidator.dll
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.pdb
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\appValidator.genruntimeconfig.cache
+C:\prog\7term\Security\appValidator\obj\Debug\net6.0-windows\ref\appValidator.dll

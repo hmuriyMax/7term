@@ -34,12 +34,16 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(108, 37);
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.MaximumSize = new System.Drawing.Size(380, 200);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(165, 16);
+            this.label1.Size = new System.Drawing.Size(358, 106);
             this.label1.TabIndex = 0;
             this.label1.Text = "Установщик поврежден!";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button1
             // 
@@ -70,7 +74,6 @@
             this.Text = "Ошибка";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

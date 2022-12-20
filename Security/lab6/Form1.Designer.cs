@@ -37,6 +37,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button2 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(403, 202);
+            this.label3.Location = new System.Drawing.Point(403, 287);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(252, 16);
             this.label3.TabIndex = 4;
@@ -90,7 +92,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(406, 221);
+            this.progressBar1.Location = new System.Drawing.Point(406, 306);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(305, 16);
             this.progressBar1.TabIndex = 5;
@@ -106,12 +108,29 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(403, 184);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(227, 16);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Выберите, куда установить ключ:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(503, 203);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(214, 22);
+            this.textBox1.TabIndex = 8;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(765, 451);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label3);
@@ -123,7 +142,6 @@
             this.MinimumSize = new System.Drawing.Size(783, 498);
             this.Name = "Form1";
             this.Text = "Установка";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -140,6 +158,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

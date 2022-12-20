@@ -23,14 +23,10 @@ namespace lab6
 
         private bool DirChosen, InfoCollected;
         public static DirectoryInfo dir;
+        private byte[] sysInfo;
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void MessShow(string message)
@@ -42,14 +38,53 @@ namespace lab6
             this.Hide();
         }
 
+        private void CopyAllFiles(string dirpath, string dest)
+        {
+            string[] files = Directory.GetFiles(dirpath);
+            string[] dirs = Directory.GetDirectories(dirpath);
+            foreach (var dir in dirs)
+            {
+                string newDir = dest +'\\'+ dir.Split('\\').Last();
+                Directory.CreateDirectory(newDir);
+                CopyAllFiles(dir, newDir);
+            }
+            foreach (var file in files)
+            {
+                string newFile = dest + file.Substring(dirpath.Length);
+                if (File.Exists(newFile))
+                {
+                    File.Delete(newFile);
+                }
+                File.Copy(file, newFile);
+            }
+            return;
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("bin"))
+            if (!Directory.Exists("program"))
             {
                 MessShow("Установщик поврежден!");
                 return;
             }
-            File.Copy("bin", dir.FullName + "\\webServer.exe");
+            if (textBox1.Text == "")
+            {
+                MessShow("Вы не ввели имя регистра");
+                return;
+            }
+            CopyAllFiles("program", dir.FullName);
+
+            byte[] signHashData, publicKey;
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+                signHashData = rsa.SignData(sysInfo, "MD5");
+                publicKey = rsa.ExportCspBlob(false);
+            }
+
+            string s = "HKEY_CURRENT_USER\\Software\\" + textBox1.Text;
+            Registry.SetValue(s, "Signature", signHashData);
+            Registry.SetValue(s, "Public key", publicKey);
+
             MessShow("Успех!");
             
         }
@@ -65,13 +100,14 @@ namespace lab6
                 {
                     dialog.Dispose();
                 }
-                dir = Directory.CreateDirectory(path + "\\SuperSecureSystem");
+                string newDir = path + "\\SuperSecureSystem";
 
-                if (Directory.Exists(dir.ToString()))
+                if (Directory.Exists(newDir))
                 {
                     MessShow("Директория уже существует.");
                     return;
                 }
+                dir = Directory.CreateDirectory(newDir);
                 DirChosen = true;
                 get_info();
                 if (CheckReady()){
@@ -121,9 +157,7 @@ namespace lab6
             Write(data, DriveFormat());
             progressBar1.Value = 85;
 
-            MD5 hash = MD5.Create();
-            byte[] hashBytes = hash.ComputeHash(data);
-            Registry.SetValue("HKEY_CURRENT_USER\\Software\\Schemilkin", "Signature", hashBytes);
+            sysInfo = data.GetBuffer();
             progressBar1.Value = 100;
             InfoCollected = true;
             if (CheckReady()) {
