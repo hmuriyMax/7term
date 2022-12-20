@@ -7,7 +7,7 @@ type MinusNet struct {
 	inputCount, hiddenCount, outputCount int
 }
 
-const dirMinus = "./datasets/minusDetect"
+const dirMinus = "datasets/minusDetect"
 
 func NewMinusNet(middleCount int) MinusNet {
 	return MinusNet{

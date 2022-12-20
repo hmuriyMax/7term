@@ -7,7 +7,7 @@ type GameNet struct {
 	inputCount, hiddenCount, outputCount int
 }
 
-const dirGame = "./datasets/game"
+const dirGame = "datasets/game"
 
 func NewGameNet(middleCount int) GameNet {
 	return GameNet{

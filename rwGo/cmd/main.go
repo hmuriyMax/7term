@@ -28,6 +28,9 @@ func checkExample(nn neuronets.Neural) {
 const totalTries = 1000
 
 func main() {
+	if len(os.Args) < 3 {
+		os.Exit(-1)
+	}
 	mC, err := strconv.Atoi(os.Args[1])
 	if err != nil {
 		os.Exit(-1)
@@ -37,6 +40,7 @@ func main() {
 		os.Exit(-1)
 	}
 
+	fmt.Printf("Neuro params: middleneuros: %d, steps: %d\n", mC, it)
 	nn := neuronets.NewMinusNet(mC)
 	nn.CreateNN(true, it)
 
@@ -56,5 +60,8 @@ func main() {
 			correctCount++
 		}
 	}
-	fmt.Printf("Correct items: %v%% \n", correctCount*100/totalTries)
+	percent := correctCount * 100 / totalTries
+	fmt.Printf("Correct items: %v%% \n", percent)
+	//TODO: парсить в JSON
+	os.Exit(percent)
 }
