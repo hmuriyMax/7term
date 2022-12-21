@@ -1,6 +1,7 @@
 package neuronets
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"rwGo/internal/entities"
@@ -20,8 +21,13 @@ func NewMinusNet() MinusNet {
 	}
 }
 
-func (g *MinusNet) CreateNN(regenerate bool, middleCount int, iterations int) {
-	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, middleCount, g.outputCount}, iterations)
+func (g *MinusNet) CreateNN(regenerate bool, middleCount int, iterations int, id int) {
+	addPath := ""
+	if id > 0 {
+		addPath = fmt.Sprintf("/%d", id)
+	}
+	g.additionalPath = addPath
+	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, middleCount, g.outputCount}, iterations, addPath)
 }
 
 func (g *MinusNet) GetResult(data []float64) string {

@@ -15,16 +15,27 @@ if __name__ == '__main__':
     neurons = {}
     iters = {}
     prec = []
-    nowNeurons = 0
-    line = []
+
+    # lastNeuron = 0
+    # lastIter = 0
     for el in exp["Experiments"]:
-        if el["Neurons"] != nowNeurons and line != []:
-            prec.append(line)
-            line = []
-        nowNeurons = el["Neurons"]
-        line.append(el["Accuracy"])
         neurons[el["Neurons"]] = True
         iters[el["Iterations"]] = True
+
+    itr = 0
+    for key in neurons:
+        neurons[key] = itr
+        itr += 1
+
+    itr = 0
+    for key in iters:
+        iters[key] = itr
+        itr += 1
+
+    prec = [[0 for _ in iters] for _ in neurons]
+
+    for el in exp["Experiments"]:
+        prec[neurons[el["Neurons"]]][iters[el["Iterations"]]] = el["Accuracy"]
         # while
         # neurons.append(el["Neurons"])
         # iters.append(el["Iterations"])
@@ -33,7 +44,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.imshow(prec, cmap='rainbow', aspect='equal', vmin=0, vmax=100, origin="lower")
     plt.colorbar()
-    plt.yticks(ticks=np.arange(20), labels=neurons.keys())
-    plt.xticks(ticks=np.arange(6), labels=iters.keys(), rotation=90)
+    plt.yticks(ticks=np.arange(len(neurons.keys())), labels=neurons.keys())
+    plt.xticks(ticks=np.arange(len(iters.keys())), labels=iters.keys(), rotation=90)
     plt.show()
     # time.sleep(10)

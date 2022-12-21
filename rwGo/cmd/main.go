@@ -37,9 +37,9 @@ func checkExample(nn neuronets.Neural) {
 	fmt.Printf("%v: %v", out, nn.GetResult(out))
 }
 
-func PerformNS(nn neuronets.Neural, mC int, it int) int {
+func PerformNS(nn neuronets.Neural, mC int, it int, id int) int {
 	fmt.Printf("Neuro params: middleneuros: %d, steps: %d\n", mC, it)
-	nn.CreateNN(true, mC, it)
+	nn.CreateNN(true, mC, it, id)
 
 	correctCount := 0
 	for i := 0; i < totalTries; i++ {
@@ -97,10 +97,10 @@ func main() {
 	start := time.Now()
 	for n := 1; n <= 20; n++ {
 		for iterNumPow := 0; iterNumPow < 6; iterNumPow++ {
-			iterNum := int(math.Pow10(iterNumPow))
+			iterNum := int(math.Pow(2, float64(iterNumPow)))
 			accur := 0
 			for i := 0; i < attempts; i++ {
-				accur += PerformNS(&nn, n, iterNum)
+				accur += PerformNS(&nn, n, iterNum, -1)
 			}
 			accur /= attempts
 			res.Experiments = append(res.Experiments, struct {

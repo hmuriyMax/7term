@@ -12,15 +12,16 @@ import (
 const defaultNeuroFile = "/nn"
 
 type Neural interface {
-	CreateNN(bool, int, int)
+	CreateNN(bool, int, int, int)
 	GetDirPath() string
 	GetResult([]float64) string
 	Forward([]float64) []float64
 }
 
 type BaseNN struct {
-	filepath string
-	nn       *gonn.NeuralNetwork
+	additionalPath string
+	filepath       string
+	nn             *gonn.NeuralNetwork
 }
 
 func (base *BaseNN) GetDirPath() string {
@@ -28,7 +29,7 @@ func (base *BaseNN) GetDirPath() string {
 }
 
 func (base *BaseNN) Forward(input []float64) []float64 {
-	nn := gonn.LoadNN(base.filepath + defaultNeuroFile)
+	nn := gonn.LoadNN(base.filepath + base.additionalPath + defaultNeuroFile)
 	return nn.Forward(input)
 }
 
@@ -38,10 +39,11 @@ func countRes(data []float64, resMap map[int]string) (string, bool) {
 	return res, ok
 }
 
-func createNN(path string, regen bool, param []int, iterCnt int) *gonn.NeuralNetwork {
-	if _, err := os.Open(path + defaultNeuroFile); !errors.Is(err, os.ErrNotExist) && !regen {
+func createNN(path string, regen bool, param []int, iterCnt int, addPath string) *gonn.NeuralNetwork {
+
+	if _, err := os.Open(path + addPath + defaultNeuroFile); !errors.Is(err, os.ErrNotExist) && !regen {
 		// Загружем НС из файла.
-		return gonn.LoadNN(path + defaultNeuroFile)
+		return gonn.LoadNN(path + addPath + defaultNeuroFile)
 	}
 
 	// Создаём НС с 3 входными нейронами (столько же входных параметров),
@@ -64,6 +66,6 @@ func createNN(path string, regen bool, param []int, iterCnt int) *gonn.NeuralNet
 	nn.Train(input.ConvertToFloat64(), target.ConvertToFloat64(), iterCnt)
 
 	// Сохраняем готовую НС в файл.
-	gonn.DumpNN(path+defaultNeuroFile, nn)
+	gonn.DumpNN(path+addPath+defaultNeuroFile, nn)
 	return nn
 }
