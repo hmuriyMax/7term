@@ -9,6 +9,7 @@ import (
 	"os"
 	"rwGo/internal/csv"
 	"rwGo/neuronets"
+	"sync"
 	"time"
 )
 
@@ -95,24 +96,34 @@ func main() {
 	//}
 	log.Printf("started performing experiments")
 	start := time.Now()
-	for n := 1; n <= 20; n++ {
-		for iterNumPow := 0; iterNumPow < 6; iterNumPow++ {
-			iterNum := int(math.Pow(2, float64(iterNumPow)))
-			accur := 0
-			for i := 0; i < attempts; i++ {
-				accur += PerformNS(&nn, n, iterNum, -1)
+	wg := sync.WaitGroup{}
+	mu := sync.Mutex{}
+	for iterNumPow := 0; iterNumPow < 6; iterNumPow++ {
+		wg.Add(1)
+		func(iterNumPow int) {
+			defer wg.Done()
+			for n := 1; n <= 20; n++ {
+				newN := neuronets.NewMinusNet()
+				iterNum := int(math.Pow(2, float64(iterNumPow)))
+				accur := 0
+				for i := 0; i < attempts; i++ {
+					accur += PerformNS(&newN, n, iterNum, -1)
+				}
+				accur /= attempts
+				mu.Lock()
+				res.Experiments = append(res.Experiments, struct {
+					Neurons    int
+					Iterations int
+					Accuracy   int
+				}{Neurons: n, Iterations: iterNum, Accuracy: accur})
+				mu.Unlock()
 			}
-			accur /= attempts
-			res.Experiments = append(res.Experiments, struct {
-				Neurons    int
-				Iterations int
-				Accuracy   int
-			}{Neurons: n, Iterations: iterNum, Accuracy: accur})
-		}
+		}(iterNumPow)
 	}
+	wg.Wait()
 	res.TotalTime = int(time.Since(start).Seconds())
 	log.Printf("finished performing experiments")
-	outPut, err := os.OpenFile(outputFile, os.O_WRONLY|os.O_CREATE, 0644)
+	outPut, err := os.OpenFile(outputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatalf("open output.txt error: %v", err)
 	}

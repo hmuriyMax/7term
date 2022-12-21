@@ -40,7 +40,12 @@ func countRes(data []float64, resMap map[int]string) (string, bool) {
 }
 
 func createNN(path string, regen bool, param []int, iterCnt int, addPath string) *gonn.NeuralNetwork {
-
+	if addPath != "" {
+		err := os.Mkdir(path+addPath, 0660)
+		if err != nil && !os.IsExist(err) {
+			log.Fatalln(err)
+		}
+	}
 	if _, err := os.Open(path + addPath + defaultNeuroFile); !errors.Is(err, os.ErrNotExist) && !regen {
 		// Загружем НС из файла.
 		return gonn.LoadNN(path + addPath + defaultNeuroFile)
