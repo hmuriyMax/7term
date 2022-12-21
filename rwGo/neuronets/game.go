@@ -1,6 +1,8 @@
 package neuronets
 
-import "log"
+import (
+	"log"
+)
 
 type GameNet struct {
 	BaseNN
@@ -9,15 +11,15 @@ type GameNet struct {
 
 const dirGame = "datasets/game"
 
-func NewGameNet(middleCount int) GameNet {
+func NewGameNet() GameNet {
 	return GameNet{
 		BaseNN{filepath: dirGame},
-		3, middleCount, 4,
+		3, 1, 4,
 	}
 }
 
-func (g *GameNet) CreateNN(regenerate bool, iterations int) {
-	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, g.hiddenCount, g.outputCount}, iterations)
+func (g *GameNet) CreateNN(regenerate bool, middleCount int, iterations int) {
+	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, middleCount, g.outputCount}, iterations)
 }
 
 func (g *GameNet) GetResult(data []float64) string {

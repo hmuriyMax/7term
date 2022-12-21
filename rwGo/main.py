@@ -1,21 +1,39 @@
+import json
 import os
+import time
+
+import numpy as np
 from matplotlib import use as mpl_use
-mpl_use('Qt5Agg')
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    x = []
-    y = []
-    z = []
-    for n in range(10):
-        for iters in range(10):
-            x.append(n + 1)
-            y.append((iters + 1) * 10000)
-            p1 = os.system("..\\rwGo\\neuro.exe " + str(n) + " " + str(iters))
-            p2 = os.system("..\\rwGo\\neuro.exe " + str(n) + " " + str(iters))
-            p3 = os.system("..\\rwGo\\neuro.exe " + str(n) + " " + str(iters))
-            z.append((p1 + p2 + p3) / 3)
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.view_init(100, 110, 135)
-    ax.scatter(x, y, z, s=5, c=z, cmap='coolwarm')
+    with open("output.json", "r") as my_file:
+        experiments = my_file.read()
+
+    exp = json.loads(experiments)
+
+    neurons = {}
+    iters = {}
+    prec = []
+    nowNeurons = 0
+    line = []
+    for el in exp["Experiments"]:
+        if el["Neurons"] != nowNeurons and line != []:
+            prec.append(line)
+            line = []
+        nowNeurons = el["Neurons"]
+        line.append(el["Accuracy"])
+        neurons[el["Neurons"]] = True
+        iters[el["Iterations"]] = True
+        # while
+        # neurons.append(el["Neurons"])
+        # iters.append(el["Iterations"])
+        # prec.append(el["Accuracy"])
+
+    plt.figure()
+    plt.imshow(prec, cmap='rainbow', aspect='equal', vmin=0, vmax=100, origin="lower")
+    plt.colorbar()
+    plt.yticks(ticks=np.arange(20), labels=neurons.keys())
+    plt.xticks(ticks=np.arange(6), labels=iters.keys(), rotation=90)
+    plt.show()
+    # time.sleep(10)

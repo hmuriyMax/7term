@@ -12,6 +12,7 @@ import (
 const defaultNeuroFile = "/nn"
 
 type Neural interface {
+	CreateNN(bool, int, int)
 	GetDirPath() string
 	GetResult([]float64) string
 	Forward([]float64) []float64
@@ -47,7 +48,6 @@ func createNN(path string, regen bool, param []int, iterCnt int) *gonn.NeuralNet
 	// 16 скрытыми нейронами и
 	// 4 выходными нейронами (столько же вариантов ответа)
 	nn := gonn.DefaultNetwork(param[0], param[1], param[2], false)
-
 	// Создаём массив входящих параметров:
 	// 1 параметр - количество здоровья (0.1 - 1.0)
 	// 2 параметр - наличие оружия (0 - нет, 1 - есть)
@@ -61,7 +61,7 @@ func createNN(path string, regen bool, param []int, iterCnt int) *gonn.NeuralNet
 	}
 	// Начинаем обучать нашу НС.
 	// Количество итераций - 100000
-	nn.Train(input, target, iterCnt)
+	nn.Train(input.ConvertToFloat64(), target.ConvertToFloat64(), iterCnt)
 
 	// Сохраняем готовую НС в файл.
 	gonn.DumpNN(path+defaultNeuroFile, nn)

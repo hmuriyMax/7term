@@ -1,6 +1,10 @@
 package neuronets
 
-import "log"
+import (
+	"log"
+	"math/rand"
+	"rwGo/internal/entities"
+)
 
 type MinusNet struct {
 	BaseNN
@@ -9,15 +13,15 @@ type MinusNet struct {
 
 const dirMinus = "datasets/minusDetect"
 
-func NewMinusNet(middleCount int) MinusNet {
+func NewMinusNet() MinusNet {
 	return MinusNet{
 		BaseNN{filepath: dirMinus},
-		2, middleCount, 2,
+		2, 1, 2,
 	}
 }
 
-func (g *MinusNet) CreateNN(regenerate bool, iterations int) {
-	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, g.hiddenCount, g.outputCount}, iterations)
+func (g *MinusNet) CreateNN(regenerate bool, middleCount int, iterations int) {
+	g.nn = createNN(g.filepath, regenerate, []int{g.inputCount, middleCount, g.outputCount}, iterations)
 }
 
 func (g *MinusNet) GetResult(data []float64) string {
@@ -29,4 +33,21 @@ func (g *MinusNet) GetResult(data []float64) string {
 		log.Println("error parsing")
 	}
 	return outPut
+}
+
+func (g *MinusNet) Generate(len int, num int) (inp entities.Data, out entities.Data) {
+
+	for i := 0; i < len; i++ {
+		a := rand.Intn(num*2) - num
+		b := rand.Intn(num*2) - num
+		inp = append(inp, []any{a, b})
+		var outExp []any
+		if a*b < 0 {
+			outExp = append(outExp, 0, 1)
+		} else {
+			outExp = append(outExp, 1, 0)
+		}
+		out = append(out, outExp)
+	}
+	return
 }

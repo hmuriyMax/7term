@@ -26,7 +26,7 @@ func ParseCSV(filepath string) (entities.Data, error) {
 }
 
 func WriteCSV(filepath string, data entities.Data) error {
-	file, err := os.OpenFile(filepath, os.O_RDWR, 0777)
+	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
