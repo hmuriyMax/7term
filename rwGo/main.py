@@ -22,6 +22,9 @@ if __name__ == '__main__':
         neurons[el["Neurons"]] = True
         iters[el["Iterations"]] = True
 
+    neurons = dict(sorted(neurons.items()))
+    iters = dict(sorted(iters.items()))
+
     itr = 0
     for key in neurons:
         neurons[key] = itr
@@ -48,3 +51,5 @@ if __name__ == '__main__':
     plt.xticks(ticks=np.arange(len(iters.keys())), labels=iters.keys(), rotation=90)
     plt.show()
     # time.sleep(10)
+    plt.plot([i + 1 for i in range(14)], [38, 12, 9, 10, 10, 11, 11, 9, 10, 11, 9, 10, 10, 10])
+    plt.show()

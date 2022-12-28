@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"runtime"
 	"rwGo/internal/csv"
 	"rwGo/neuronets"
 	"sync"
@@ -73,6 +74,8 @@ const (
 func main() {
 	var res Result
 
+	runtime.GOMAXPROCS(120)
+	fmt.Println(runtime.NumCPU())
 	nn := neuronets.NewMinusNet()
 	i, o := nn.Generate(10, stdDev*2)
 	err := csv.WriteCSV(nn.GetDirPath()+csv.InputName, i)
@@ -98,16 +101,16 @@ func main() {
 	start := time.Now()
 	wg := sync.WaitGroup{}
 	mu := sync.Mutex{}
-	for iterNumPow := 0; iterNumPow < 6; iterNumPow++ {
-		wg.Add(1)
-		func(iterNumPow int) {
-			defer wg.Done()
-			for n := 1; n <= 20; n++ {
+	for n := 1; n <= 20; n++ {
+		for iterNumPow := 0; iterNumPow < 6; iterNumPow++ {
+			wg.Add(1)
+			go func(n int, iterNumPow int) {
+				defer wg.Done()
 				newN := neuronets.NewMinusNet()
 				iterNum := int(math.Pow(2, float64(iterNumPow)))
 				accur := 0
 				for i := 0; i < attempts; i++ {
-					accur += PerformNS(&newN, n, iterNum, -1)
+					accur += PerformNS(&newN, n, iterNum, n*10+iterNumPow)
 				}
 				accur /= attempts
 				mu.Lock()
@@ -117,8 +120,8 @@ func main() {
 					Accuracy   int
 				}{Neurons: n, Iterations: iterNum, Accuracy: accur})
 				mu.Unlock()
-			}
-		}(iterNumPow)
+			}(n, iterNumPow)
+		}
 	}
 	wg.Wait()
 	res.TotalTime = int(time.Since(start).Seconds())
